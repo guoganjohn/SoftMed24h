@@ -40,7 +40,9 @@ class HeaderSection extends StatelessWidget {
                           width: 260,
                           height: 36,
                           fontSize: 14,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/register');
+                          },
                         ),
                       ],
                     ),
@@ -185,7 +187,9 @@ class HeaderSection extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed('/register');
+                                },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.secondary,
                                 ),
@@ -277,7 +281,11 @@ class HeaderSection extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 10),
                                 ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(
+                                      context,
+                                    ).pushNamed('/register');
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.secondary,
                                     padding: const EdgeInsets.symmetric(

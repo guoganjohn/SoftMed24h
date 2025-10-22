@@ -70,7 +70,7 @@ class LoginScreen extends StatelessWidget {
             ),
             const Spacer(),
             AppButton(
-              label: 'Criar conta',
+              label: 'Cadastrar',
               width: 200,
               height: 40,
               fontSize: 18,

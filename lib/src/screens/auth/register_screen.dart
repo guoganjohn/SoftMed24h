@@ -9,6 +9,9 @@ class AppColors {
   static const Color secondary = Color(0xFFFFFFFF); // White (for backgrounds)
   static const Color accent = Color(0xFF1E88E5); // Medium Blue
   static const Color text = Color(0xFF424242); // Greyish text
+  static const Color background = Color(
+    0xFFF7F7F7,
+  ); // Light background for form
 }
 
 class RegisterScreen extends StatelessWidget {
@@ -18,16 +21,30 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          if (constraints.maxWidth < 800) {
-            // Mobile/Narrow Layout
-            return _buildMobileLayout(context);
-          } else {
-            // Tablet/Desktop Layout
-            return _buildDesktopLayout(context);
-          }
-        },
+      // Use SingleChildScrollView to ensure the long form is scrollable
+      body: SingleChildScrollView(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Apply a max width to the form content on large screens for readability
+            final bool isWideScreen = constraints.maxWidth >= 800;
+            return Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: isWideScreen ? 700 : constraints.maxWidth,
+                ),
+                child: Column(
+                  children: [
+                    // Form Header
+                    _buildFormHeader(context),
+
+                    // Form Body
+                    _buildFormSection(context, isWideScreen),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -43,40 +60,31 @@ class RegisterScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Row(
           children: [
-            // Logo Placeholder (e.g., Image.asset('images/logo.png'))
-            GestureDetector(
-              onTap: () {
-                Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil('/', (route) => false);
-              },
-              child: const Row(
-                children: [
-                  Text(
-                    'MeuMed',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    'Nosso plano é a sua saúde',
-                    style: TextStyle(color: AppColors.text, fontSize: 12),
-                  ),
-                ],
+            const Text(
+              'MeuMed',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
+            const SizedBox(width: 5),
+            const Text(
+              'Nosso plano é a sua saúde',
+              style: TextStyle(color: AppColors.text, fontSize: 12),
+            ),
             const Spacer(),
-            AppButton(
-              label: 'Entrar',
-              width: 200,
-              height: 40,
-              fontSize: 18,
-              onPressed: () {
-                Navigator.of(context).pushNamed('/login');
-              },
+            Container(
+              alignment: Alignment.center,
+              child: AppButton(
+                label: 'Entrar',
+                width: 200,
+                height: 40,
+                fontSize: 18,
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/login');
+                },
+              ),
             ),
           ],
         ),
@@ -84,22 +92,273 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  // --- Desktop/Wide Layout ---
-
-  Widget _buildDesktopLayout(BuildContext context) {
-    return Row(
+  // --- Form Header (New Widget) ---
+  Widget _buildFormHeader(BuildContext context) {
+    return Column(
       children: [
-        // Left Side: Image and CTA Text
-        Expanded(flex: 5, child: _buildImageSection(context)),
-        // Right Side: Registration Form
-        Expanded(
-          flex: 4,
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 500,
-              ), // Slightly wider form for register fields
-              child: _buildFormSection(context),
+        const SizedBox(height: 30),
+        const Text(
+          'Preencha o formulário abaixo para ter acesso à nossa área exclusiva do consumidor.',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16, color: AppColors.text),
+        ),
+        const SizedBox(height: 5),
+        const Text(
+          'Apenas itens marcados com * são obrigatórios.',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 14, color: Colors.red),
+        ),
+        const SizedBox(height: 30),
+      ],
+    );
+  }
+
+  // Right Section (Form) - Adapted for Registration Fields
+  Widget _buildFormSection(BuildContext context, bool isWideScreen) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 40.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 1. Name
+          _buildFormLabel('Nome', mandatory: true),
+          _buildTextField(),
+          const SizedBox(height: 20),
+
+          // 2. E-mail
+          _buildFormLabel('E-mail', mandatory: true),
+          _buildTextField(keyboardType: TextInputType.emailAddress),
+          const SizedBox(height: 20),
+
+          // 3. Gender and CPF
+          _buildGenderSection(context),
+          const SizedBox(height: 20),
+
+          // 4. Cell phone
+          _buildFormLabel('Celular', mandatory: true, hint: ''),
+          _buildTextField(keyboardType: TextInputType.phone, initialValue: ''),
+          const SizedBox(height: 20),
+
+          // 5. Date of birth
+          _buildFormLabel('Data de Nascimento', mandatory: true),
+          _buildTextField(keyboardType: TextInputType.datetime),
+          const SizedBox(height: 20),
+
+          // 6. Address Header and Input (Replicating Image Layout)
+          _buildAddressHeader(),
+          _buildAddressField('CEP:', '', hasChangeButton: false),
+          const SizedBox(height: 20),
+
+          // 7. Password
+          _buildFormLabel('Senha', mandatory: true),
+          _buildTextField(isPassword: true),
+          const SizedBox(height: 20),
+
+          // 8. Confirm Password
+          _buildFormLabel('Confirme a senha', mandatory: true),
+          _buildTextField(isPassword: true),
+          const SizedBox(height: 30),
+
+          // 9. Terms and Conditions
+          _buildTermsAndConditions(context),
+
+          const SizedBox(height: 30),
+
+          // Register Button
+          SizedBox(
+            width: double.infinity,
+            child: Container(
+              alignment: Alignment.center,
+              child: AppButton(
+                label: 'Cadastrar',
+                width: 200,
+                height: 40,
+                fontSize: 18,
+                onPressed: () {},
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- Field/Layout Helpers ---
+
+  Widget _buildFormLabel(String label, {bool mandatory = false, String? hint}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        children: [
+          if (mandatory)
+            const Text('*', style: TextStyle(color: Colors.red, fontSize: 16)),
+          Text(
+            label,
+            style: const TextStyle(
+              color: AppColors.text,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          if (hint != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                hint,
+                style: const TextStyle(color: AppColors.text, fontSize: 12),
+              ),
+            ),
+          const SizedBox(width: 4),
+          // Question mark icon placeholder
+          Icon(
+            Icons.help_outline,
+            size: 14,
+            color: AppColors.text.withOpacity(0.6),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGenderSection(BuildContext context) {
+    // This is styled to match the image's use of separate inputs for Gender and CPF
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildFormLabel('Gênero', mandatory: true),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Radio Buttons for Gender
+                  Row(
+                    children: [
+                      Radio(
+                        value: 'Masculino',
+                        groupValue: 'gender',
+                        onChanged: (v) {},
+                        activeColor: AppColors.primary,
+                      ),
+                      const Text(
+                        'Masculino',
+                        style: TextStyle(color: AppColors.text),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Radio(
+                        value: 'Feminino',
+                        groupValue: 'gender',
+                        onChanged: (v) {},
+                        activeColor: AppColors.primary,
+                      ),
+                      const Text(
+                        'Feminino',
+                        style: TextStyle(color: AppColors.text),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Radio(
+                        value: 'Não-binário',
+                        groupValue: 'gender',
+                        onChanged: (v) {},
+                        activeColor: AppColors.primary,
+                      ),
+                      const Text(
+                        'Não-binário',
+                        style: TextStyle(color: AppColors.text),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // CPF Field
+                  _buildFormLabel('CPF', mandatory: true),
+                  _buildTextField(keyboardType: TextInputType.number),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAddressHeader() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Endereço',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.text,
+            ),
+          ),
+          const Divider(color: Color(0xFFE0E0E0)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAddressField(
+    String label,
+    String hint, {
+    bool hasChangeButton = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildFormLabel(label, mandatory: true),
+        Container(
+          height: 50, // Fixed height for visual alignment
+          decoration: BoxDecoration(
+            color: const Color(0xFFF0F4F8), // Light grey background
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: const Color(0xFFE0E0E0)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    hint,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.text.withOpacity(0.8),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (hasChangeButton)
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Mudar',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
@@ -107,217 +366,47 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  // Left Section (Image) - Reused from Login Screen
-  Widget _buildImageSection(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.accent, // Background for safety
-        // Placeholder for the large image
-        image: DecorationImage(
-          image: AssetImage('images/doctors_register.jpg'),
-          fit: BoxFit.cover,
+  Widget _buildTermsAndConditions(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Checkbox(
+          value: true, // Placeholder value
+          onChanged: (bool? newValue) {},
+          activeColor: AppColors.primary,
         ),
-      ),
-      child: Container(
-        // Apply a subtle dark overlay at the bottom for text contrast
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black.withOpacity(0),
-              Colors.black.withOpacity(0.5),
-            ],
-            stops: const [0.6, 1.0],
-          ),
-        ),
-        alignment: Alignment.bottomLeft,
-        padding: const EdgeInsets.all(40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Text(
-                  'Junte-se a nós com o ',
-                  style: TextStyle(
-                    color: AppColors.secondary,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  'MeuMed.',
-                  style: TextStyle(
-                    color: AppColors.secondary,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black.withOpacity(0.5),
-                        blurRadius: 4,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text.rich(
+                TextSpan(
+                  text: 'Li e concordo com os ',
+                  style: const TextStyle(color: AppColors.text, fontSize: 14),
+                  children: [
+                    TextSpan(
+                      text: 'Termos e Condições de Uso da Plataforma de Saúde',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        decoration: TextDecoration.underline,
                       ),
-                    ],
-                  ),
+                      // onTap: () => launch('url_to_terms'), // In a real app
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            const Text(
-              'Saúde Conectada: Atendimento Superior, Planos Personalizados e Inovação Tecnológica ao Seu Alcance!',
-              style: TextStyle(
-                color: AppColors.secondary,
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Right Section (Form) - Adapted for Registration Fields
-  Widget _buildFormSection(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(40.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Preencha os campos abaixo',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: AppColors.text,
+              const SizedBox(height: 10),
+              Text(
+                'Em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709, de 14 de agosto de 2018), entenda por que coletamos os seus dados.',
+                style: TextStyle(
+                  color: AppColors.text.withOpacity(0.7),
+                  fontSize: 12,
+                ),
               ),
-            ),
-            const SizedBox(height: 5),
-            const Text(
-              'para melhor experiência.',
-              style: TextStyle(fontSize: 18, color: AppColors.text),
-            ),
-            const SizedBox(height: 40),
-
-            // 1. Nome Completo
-            const Text(
-              'Nome completo',
-              style: TextStyle(color: AppColors.text),
-            ),
-            const SizedBox(height: 8),
-            _buildTextField(),
-            const SizedBox(height: 20),
-
-            // 2. Data de Nascimento and Celular (Side by Side on Desktop)
-            LayoutBuilder(
-              builder: (context, constraints) {
-                return constraints.maxWidth > 400
-                    ? Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Data de nasc.',
-                                  style: TextStyle(color: AppColors.text),
-                                ),
-                                const SizedBox(height: 8),
-                                _buildTextField(
-                                  keyboardType: TextInputType.datetime,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Celular',
-                                  style: TextStyle(color: AppColors.text),
-                                ),
-                                const SizedBox(height: 8),
-                                _buildTextField(
-                                  keyboardType: TextInputType.phone,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Data de nasc.',
-                            style: TextStyle(color: AppColors.text),
-                          ),
-                          const SizedBox(height: 8),
-                          _buildTextField(keyboardType: TextInputType.datetime),
-                          const SizedBox(height: 20),
-                          const Text(
-                            'Celular',
-                            style: TextStyle(color: AppColors.text),
-                          ),
-                          const SizedBox(height: 8),
-                          _buildTextField(keyboardType: TextInputType.phone),
-                        ],
-                      );
-              },
-            ),
-            const SizedBox(height: 20),
-
-            // 3. E-mail
-            const Text('E-mail', style: TextStyle(color: AppColors.text)),
-            const SizedBox(height: 8),
-            _buildTextField(keyboardType: TextInputType.emailAddress),
-            const SizedBox(height: 20),
-
-            // 4. Senha
-            const Text('Senha', style: TextStyle(color: AppColors.text)),
-            const SizedBox(height: 8),
-            _buildTextField(isPassword: true),
-
-            const SizedBox(height: 40),
-
-            // Criar Conta Button
-            Container(
-              alignment: Alignment.center,
-              child: AppButton(
-                label: 'Criar conta',
-                width: 200,
-                height: 40,
-                fontSize: 18,
-                onPressed: () {},
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // --- Mobile/Narrow Layout ---
-
-  Widget _buildMobileLayout(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Top half: Form
-          _buildFormSection(context),
-
-          // Bottom half: Image and CTA (Simplified for mobile)
-          SizedBox(
-            height: 300, // Fixed height for the image section on mobile
-            child: _buildImageSection(context),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -326,16 +415,20 @@ class RegisterScreen extends StatelessWidget {
   Widget _buildTextField({
     bool isPassword = false,
     TextInputType keyboardType = TextInputType.text,
+    String? initialValue,
   }) {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFF0F4F8), // Light grey background
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4),
         border: Border.all(color: const Color(0xFFE0E0E0)),
       ),
       child: TextField(
         obscureText: isPassword,
         keyboardType: keyboardType,
+        controller: initialValue != null
+            ? TextEditingController(text: initialValue)
+            : null,
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(

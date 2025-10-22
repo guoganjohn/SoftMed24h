@@ -71,7 +71,7 @@ class _MediaSectionState extends State<MediaSection> {
       child: Column(
         children: [
           const Text(
-            'MEU MED NA MÍDIA:',
+            'MEUMED NA MÍDIA:',
             style: TextStyle(
               color: AppColors.secondary,
               fontSize: 18,
