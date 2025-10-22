@@ -14,9 +14,14 @@ class AppColors {
   ); // Light background for form
 }
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,31 +65,40 @@ class RegisterScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Row(
           children: [
-            const Text(
-              'MeuMed',
-              style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+            // Logo Placeholder (e.g., Image.asset('images/logo.png'))
+            GestureDetector(
+              onTap: () {
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil('/', (route) => false);
+              },
+              child: const Row(
+                children: [
+                  Text(
+                    'MeuMed',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    'Nosso plano é a sua saúde',
+                    style: TextStyle(color: AppColors.text, fontSize: 12),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(width: 5),
-            const Text(
-              'Nosso plano é a sua saúde',
-              style: TextStyle(color: AppColors.text, fontSize: 12),
             ),
             const Spacer(),
-            Container(
-              alignment: Alignment.center,
-              child: AppButton(
-                label: 'Entrar',
-                width: 200,
-                height: 40,
-                fontSize: 18,
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/login');
-                },
-              ),
+            AppButton(
+              label: 'Entrar',
+              width: 200,
+              height: 40,
+              fontSize: 18,
+              onPressed: () {
+                Navigator.of(context).pushNamed('/login');
+              },
             ),
           ],
         ),
