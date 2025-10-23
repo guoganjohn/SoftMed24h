@@ -19,7 +19,7 @@ class User(UserBase):
     prescriptions: List["Prescription"] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Import after User is defined to avoid circular import
 from app.schemas.medical_record import MedicalRecord

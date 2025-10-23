@@ -18,7 +18,7 @@ class Prescription(PrescriptionBase):
     prescriber: User
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class CreatePrescriptionRequest(BaseModel):
     patient_name: str

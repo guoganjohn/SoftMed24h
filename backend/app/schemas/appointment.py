@@ -17,7 +17,7 @@ class Appointment(AppointmentBase):
     doctor: User
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class CreateMeetingRequest(BaseModel):
     summary: str

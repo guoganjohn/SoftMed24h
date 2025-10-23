@@ -11,7 +11,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     medical_records = relationship("MedicalRecord", back_populates="patient")
-    prescriptions = relationship("Prescription", back_populates="patient")
+    prescriptions = relationship("Prescription", foreign_keys="[Prescription.patient_id]", back_populates="patient")
     appointments_as_patient = relationship("Appointment", foreign_keys="[Appointment.patient_id]", back_populates="patient")
     appointments_as_doctor = relationship("Appointment", foreign_keys="[Appointment.doctor_id]", back_populates="doctor")
     prescriptions_as_prescriber = relationship("Prescription", foreign_keys="[Prescription.prescriber_id]", back_populates="prescriber")
