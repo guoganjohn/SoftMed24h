@@ -27,7 +27,7 @@ class HeaderSection extends StatelessWidget {
                       children: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/login');
+                            Navigator.of(context).pushReplacementNamed('/login');
                           },
                           child: const Text(
                             'ENTRAR',
@@ -41,7 +41,7 @@ class HeaderSection extends StatelessWidget {
                           height: 36,
                           fontSize: 14,
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/register');
+                            Navigator.of(context).pushReplacementNamed('/register');
                           },
                         ),
                       ],
@@ -64,7 +64,7 @@ class HeaderSection extends StatelessWidget {
                         children: [
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/login');
+                              Navigator.of(context).pushReplacementNamed('/login');
                             },
                             child: const Text(
                               'ENTRAR',
@@ -78,7 +78,7 @@ class HeaderSection extends StatelessWidget {
                             height: 36,
                             fontSize: 14,
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/register');
+                              Navigator.of(context).pushReplacementNamed('/register');
                             },
                           ),
                         ],
@@ -188,7 +188,7 @@ class HeaderSection extends StatelessWidget {
                               const SizedBox(height: 10),
                               ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushNamed('/register');
+                                  Navigator.of(context).pushReplacementNamed('/register');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.secondary,
@@ -284,7 +284,7 @@ class HeaderSection extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.of(
                                       context,
-                                    ).pushNamed('/register');
+                                    ).pushReplacementNamed('/register');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.secondary,

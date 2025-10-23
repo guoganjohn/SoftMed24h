@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:softmed24h/src/utils/api_service.dart';
 import 'package:softmed24h/src/widgets/app_button.dart';
 
 // Placeholder class for AppColors
@@ -11,8 +12,23 @@ class AppColors {
   static const Color text = Color(0xFF424242); // Greyish text
 }
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +91,7 @@ class LoginScreen extends StatelessWidget {
               height: 40,
               fontSize: 18,
               onPressed: () {
-                Navigator.of(context).pushNamed('/register');
+                Navigator.of(context).pushReplacementNamed('/register');
               },
             ),
           ],
@@ -201,13 +217,13 @@ class LoginScreen extends StatelessWidget {
           // Email/CPF Field
           const Text('E-mail ou CPF', style: TextStyle(color: AppColors.text)),
           const SizedBox(height: 8),
-          _buildTextField(),
+          _buildTextField(controller: _emailController),
           const SizedBox(height: 20),
 
           // Password Field
           const Text('Senha', style: TextStyle(color: AppColors.text)),
           const SizedBox(height: 8),
-          _buildTextField(isPassword: true),
+          _buildTextField(isPassword: true, controller: _passwordController),
 
           // Forgot Password
           Align(
@@ -233,13 +249,34 @@ class LoginScreen extends StatelessWidget {
                 width: 200,
                 height: 40,
                 fontSize: 18,
-                onPressed: () {},
+                onPressed: () async {
+                  final apiService = ApiService();
+                  try {
+                    final authResponse = await apiService.login(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+                    _showSnackBar(
+                      'Login successful! Token: ${authResponse.accessToken}',
+                      Colors.green,
+                    );
+                    Navigator.of(context).pushReplacementNamed('/home');
+                  } catch (e) {
+                    _showSnackBar('Login failed: ${e.toString()}', Colors.red);
+                  }
+                },
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _showSnackBar(String message, Color color) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 
   // --- Mobile/Narrow Layout ---
@@ -263,7 +300,10 @@ class LoginScreen extends StatelessWidget {
 
   // --- Helper Widgets ---
 
-  Widget _buildTextField({bool isPassword = false}) {
+  Widget _buildTextField({
+    bool isPassword = false,
+    required TextEditingController controller,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFF0F4F8), // Light grey background
@@ -271,6 +311,7 @@ class LoginScreen extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE0E0E0)),
       ),
       child: TextField(
+        controller: controller,
         obscureText: isPassword,
         decoration: InputDecoration(
           border: InputBorder.none,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:softmed24h/src/screens/auth/login_screen.dart';
 import 'package:softmed24h/src/screens/auth/register_screen.dart';
 import 'package:softmed24h/src/screens/landing/landing_screen.dart';
+import 'package:softmed24h/src/screens/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const LandingPage(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/home': (context) => const HomePage(),
       },
     );
   }

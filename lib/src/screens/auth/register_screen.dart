@@ -97,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               height: 40,
               fontSize: 18,
               onPressed: () {
-                Navigator.of(context).pushNamed('/login');
+                Navigator.of(context).pushReplacementNamed('/login');
               },
             ),
           ],
