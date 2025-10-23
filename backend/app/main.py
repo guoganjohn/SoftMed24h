@@ -5,7 +5,7 @@ from app.models import user, appointment, medical_record, prescription
 
 user.Base.metadata.create_all(bind=engine) # NOTE: In a production environment, consider using Alembic for database migrations.
 
-app = FastAPI(title="Teleconsultation Backend")
+app = FastAPI(title="SoftMed24h Backend")
 
 app.include_router(auth.router)
 app.include_router(appointments.router)
