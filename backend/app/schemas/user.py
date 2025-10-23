@@ -1,11 +1,15 @@
 from typing import List
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime # Import datetime for MedicalRecord and Prescription forward refs
 
 class UserBase(BaseModel):
     email: str
 
 class UserCreate(UserBase):
+    password: str = Field(..., max_length=72)
+
+class UserLogin(BaseModel):
+    email: str
     password: str
 
 class User(UserBase):

@@ -9,7 +9,13 @@ router = APIRouter()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def get_password_hash(password):
+def get_password_hash(password: str) -> str:
+    """
+    Hashes the password after ensuring it does not exceed the 72-character limit for bcrypt.
+    """
+    # Truncate the string to 72 characters if it's longer
+    if len(password) > 72:
+        password = password[:72]
     return pwd_context.hash(password)
 
 # Dependency to get a database session
