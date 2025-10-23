@@ -1,18 +1,7 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from app.database import SessionLocal
-from app.models import Appointment
+from fastapi import APIRouter
 
-router = APIRouter(prefix="/reports", tags=["reports"])
+router = APIRouter()
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-@router.get("/financial")
-def financial_report(db: Session = Depends(get_db)):
-    total = db.query(Appointment).filter(Appointment.status == "completed").count()
-    return {"completed_appointments": total}
+@router.get("/reports")
+def get_reports():
+    return {"message": "This is the reports router."}

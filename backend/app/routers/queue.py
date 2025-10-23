@@ -1,33 +1,19 @@
+from typing import List
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from app.database import SessionLocal
-from app import models
+from app.services.queue_service import QueueService
 
-router = APIRouter(prefix="/queue", tags=["queue"])
+router = APIRouter()
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@router.post("/queue/add/{patient_id}")
+def add_to_queue(patient_id: int, queue_service: QueueService = Depends()):
+    queue_service.add_to_queue(patient_id)
+    return {"message": f"Patient {patient_id} added to the queue."}
 
-@router.get("/status/{patient_id}")
-def get_queue_position(patient_id: str, db: Session = Depends(get_db)):
-    appt = db.query(models.Appointment).filter_by(patient_id=patient_id, status="waiting").first()
-    if not appt:
-        return {"message": "No active queue"}
-    position = db.query(models.Appointment).filter(
-        models.Appointment.status == "waiting",
-        models.Appointment.queue_position <= appt.queue_position
-    ).count()
-    return {"position": position}
+@router.delete("/queue/remove/{patient_id}")
+def remove_from_queue(patient_id: int, queue_service: QueueService = Depends()):
+    queue_service.remove_from_queue(patient_id)
+    return {"message": f"Patient {patient_id} removed from the queue."}
 
-@router.post("/next")
-def call_next_patient(db: Session = Depends(get_db)):
-    next_appt = db.query(models.Appointment).filter_by(status="waiting").order_by(models.Appointment.queue_position).first()
-    if not next_appt:
-        return {"message": "No patients in queue"}
-    next_appt.status = "in_progress"
-    db.commit()
-    return {"next_patient_id": next_appt.patient_id}
+@router.get("/queue", response_model=List[int])
+def get_queue(queue_service: QueueService = Depends()):
+    return queue_service.get_queue()

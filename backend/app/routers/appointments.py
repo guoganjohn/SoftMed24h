@@ -1,11 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
-from app import models, schemas
-from app.services.google_meet_service import create_meet_link
+from app.models.appointment import Appointment as AppointmentModel
+from app.schemas.appointment import Appointment as AppointmentSchema
+from app.services.google_meet_service import GoogleMeetService
+from datetime import datetime, timedelta
 
-router = APIRouter(prefix="/appointments", tags=["appointments"])
+router = APIRouter()
 
+# Dependency to get a database session
 def get_db():
     db = SessionLocal()
     try:
@@ -13,23 +17,16 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/purchase", response_model=schemas.AppointmentResponse)
-def purchase_appointment(data: schemas.AppointmentCreate, db: Session = Depends(get_db)):
-    count = db.query(models.Appointment).filter(models.Appointment.status == "waiting").count()
-    new_appointment = models.Appointment(patient_id=data.patient_id, queue_position=count + 1)
-    db.add(new_appointment)
-    db.commit()
-    db.refresh(new_appointment)
-    return new_appointment
+@router.get("/appointments", response_model=List[AppointmentSchema])
+def get_appointments(db: Session = Depends(get_db)):
+    appointments = db.query(AppointmentModel).all()
+    return appointments
 
-@router.post("/{appointment_id}/start-call")
-def start_call(appointment_id: str, db: Session = Depends(get_db)):
-    appointment = db.query(models.Appointment).get(appointment_id)
-    if not appointment:
-        raise HTTPException(status_code=404, detail="Appointment not found")
-
-    meet_link = create_meet_link()  # integrate with Google Meet
-    appointment.meet_link = meet_link
-    appointment.status = "in_progress"
-    db.commit()
-    return {"meet_link": meet_link, "status": "in_progress"}
+@router.post("/create-meeting")
+def create_meeting(meet_service: GoogleMeetService = Depends()):
+    summary = "Test Meeting"
+    start_time = datetime.utcnow() + timedelta(hours=1)
+    end_time = start_time + timedelta(hours=1)
+    attendees = ["test@example.com"]
+    meet_link = meet_service.create_meeting(summary, start_time, end_time, attendees)
+    return {"meet_link": meet_link}
