@@ -1,9 +1,15 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, Field
-from datetime import datetime
+from datetime import datetime, date
 
 class UserBase(BaseModel):
     email: str
+    name: Optional[str] = None
+    gender: Optional[str] = None
+    cpf: Optional[str] = None
+    phone: Optional[str] = None
+    birthday: Optional[date] = None
+    cep: Optional[str] = None
 
 class UserCreate(UserBase):
     password: str = Field(..., max_length=72)
