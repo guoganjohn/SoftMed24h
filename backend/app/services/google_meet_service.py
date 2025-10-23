@@ -1,6 +1,8 @@
 import os
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
+from datetime import datetime
+from typing import List
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,18 +13,26 @@ class GoogleMeetService:
         # handle the OAuth2 flow to get the user's consent and tokens.
         # For this example, we'll assume you have a token file.
         # You can get one by running the Google Calendar API quickstart.
+        google_oauth_token = os.getenv("GOOGLE_OAUTH_TOKEN")
+        google_refresh_token = os.getenv("GOOGLE_REFRESH_TOKEN")
+        google_client_id = os.getenv("GOOGLE_CLIENT_ID")
+        google_client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
+
+        if not all([google_oauth_token, google_refresh_token, google_client_id, google_client_secret]):
+            raise Exception("Missing Google API credentials in environment variables.")
+
         token_info = {
-            "token": os.getenv("GOOGLE_OAUTH_TOKEN"),
-            "refresh_token": os.getenv("GOOGLE_REFRESH_TOKEN"),
+            "token": google_oauth_token,
+            "refresh_token": google_refresh_token,
             "token_uri": "https://oauth2.googleapis.com/token",
-            "client_id": os.getenv("GOOGLE_CLIENT_ID"),
-            "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+            "client_id": google_client_id,
+            "client_secret": google_client_secret,
             "scopes": ["https://www.googleapis.com/auth/calendar.events"],
         }
         self.creds = Credentials.from_authorized_user_info(token_info)
         self.service = build('calendar', 'v3', credentials=self.creds)
 
-    def create_meeting(self, summary, start_time, end_time, attendees):
+    def create_meeting(self, summary: str, start_time: datetime, end_time: datetime, attendees: List[str]):
         event = {
             'summary': summary,
             'start': {
@@ -43,5 +53,8 @@ class GoogleMeetService:
                 }
             }
         }
-        event = self.service.events().insert(calendarId='primary', body=event, conferenceDataVersion=1).execute()
-        return event.get('hangoutLink')
+        try:
+            event = self.service.events().insert(calendarId='primary', body=event, conferenceDataVersion=1).execute()
+            return event.get('hangoutLink')
+        except Exception as e:
+            raise Exception(f"Failed to create Google Meet event: {e}")

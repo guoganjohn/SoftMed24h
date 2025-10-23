@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy.orm import relationship
 from app.database import Base
 
 class User(Base):
@@ -8,3 +9,9 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
+
+    medical_records = relationship("MedicalRecord", back_populates="patient")
+    prescriptions = relationship("Prescription", back_populates="patient")
+    appointments_as_patient = relationship("Appointment", foreign_keys="[Appointment.patient_id]", back_populates="patient")
+    appointments_as_doctor = relationship("Appointment", foreign_keys="[Appointment.doctor_id]", back_populates="doctor")
+    prescriptions_as_prescriber = relationship("Prescription", foreign_keys="[Prescription.prescriber_id]", back_populates="prescriber")

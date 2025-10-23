@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List, Dict, Any
 from datetime import datetime
 from app.schemas.user import User
 
@@ -18,3 +19,7 @@ class Prescription(PrescriptionBase):
 
     class Config:
         orm_mode = True
+
+class CreatePrescriptionRequest(BaseModel):
+    patient_name: str
+    medicines: List[Dict[str, Any]]

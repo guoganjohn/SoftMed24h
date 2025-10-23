@@ -1,9 +1,9 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models.appointment import Appointment as AppointmentModel
-from app.schemas.appointment import Appointment as AppointmentSchema
+from app.schemas.appointment import Appointment as AppointmentSchema, CreateMeetingRequest
 from app.services.google_meet_service import GoogleMeetService
 from datetime import datetime, timedelta
 
@@ -23,10 +23,17 @@ def get_appointments(db: Session = Depends(get_db)):
     return appointments
 
 @router.post("/create-meeting")
-def create_meeting(meet_service: GoogleMeetService = Depends()):
-    summary = "Test Meeting"
-    start_time = datetime.utcnow() + timedelta(hours=1)
-    end_time = start_time + timedelta(hours=1)
-    attendees = ["test@example.com"]
-    meet_link = meet_service.create_meeting(summary, start_time, end_time, attendees)
-    return {"meet_link": meet_link}
+def create_meeting(request: CreateMeetingRequest, meet_service: GoogleMeetService = Depends()):
+    try:
+        meet_link = meet_service.create_meeting(
+            request.summary,
+            request.start_time,
+            request.end_time,
+            request.attendees
+        )
+        return {"meet_link": meet_link}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create Google Meet meeting: {e}"
+        )

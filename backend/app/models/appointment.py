@@ -12,5 +12,5 @@ class Appointment(Base):
     appointment_time = Column(DateTime)
     status = Column(String, default="scheduled")
 
-    patient = relationship("User", foreign_keys=[patient_id])
-    doctor = relationship("User", foreign_keys=[doctor_id])
+    patient = relationship("User", foreign_keys=[patient_id], back_populates="appointments_as_patient")
+    doctor = relationship("User", foreign_keys=[doctor_id], back_populates="appointments_as_doctor")

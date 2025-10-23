@@ -1,6 +1,6 @@
 from typing import List
 from pydantic import BaseModel, Field
-from datetime import datetime # Import datetime for MedicalRecord and Prescription forward refs
+from datetime import datetime
 
 class UserBase(BaseModel):
     email: str

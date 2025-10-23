@@ -26,6 +26,9 @@ def get_db():
     finally:
         db.close()
 
+def get_user_by_email(db: Session, email: str):
+    return db.query(user_model.User).filter(user_model.User.email == email).first()
+
 @router.post("/users/", response_model=user_schema.User)
 def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(user_model.User).filter(user_model.User.email == user.email).first()

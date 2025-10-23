@@ -1,3 +1,4 @@
+from typing import List
 from pydantic import BaseModel
 from datetime import datetime
 from app.schemas.user import User
@@ -17,3 +18,9 @@ class Appointment(AppointmentBase):
 
     class Config:
         orm_mode = True
+
+class CreateMeetingRequest(BaseModel):
+    summary: str
+    start_time: datetime
+    end_time: datetime
+    attendees: List[str] = []

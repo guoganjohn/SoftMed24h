@@ -3,7 +3,7 @@ from app.routers import appointments, auth, queue, medical_records, prescription
 from app.database import engine
 from app.models import user, appointment, medical_record, prescription
 
-user.Base.metadata.create_all(bind=engine)
+user.Base.metadata.create_all(bind=engine) # NOTE: In a production environment, consider using Alembic for database migrations.
 
 app = FastAPI(title="Teleconsultation Backend")
 

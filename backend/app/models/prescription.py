@@ -14,5 +14,5 @@ class Prescription(Base):
     medication = Column(String)
     dosage = Column(String)
 
-    patient = relationship("User", foreign_keys=[patient_id])
-    prescriber = relationship("User", foreign_keys=[prescriber_id])
+    patient = relationship("User", foreign_keys=[patient_id], back_populates="prescriptions")
+    prescriber = relationship("User", foreign_keys=[prescriber_id], back_populates="prescriptions_as_prescriber")

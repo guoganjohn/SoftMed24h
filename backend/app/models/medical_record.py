@@ -13,4 +13,4 @@ class MedicalRecord(Base):
     diagnosis = Column(Text)
     treatment = Column(Text)
 
-    patient = relationship("User")
+    patient = relationship("User", back_populates="medical_records")
