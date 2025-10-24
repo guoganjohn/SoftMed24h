@@ -12,6 +12,16 @@ class PaymentService:
         stripe.api_key = self.api_key
 
     def create_payment_intent(self, amount: int, currency: str = "brl") -> dict:
+        """
+        Creates a Stripe PaymentIntent.
+
+        Args:
+            amount: The amount to charge, in the smallest currency unit (e.g., 100 for $1.00).
+            currency: The currency of the payment. Defaults to "brl".
+
+        Returns:
+            A dictionary containing the client_secret if successful, or an error message.
+        """
         try:
             intent = stripe.PaymentIntent.create(
                 amount=amount,
