@@ -21,12 +21,32 @@ class ApiService {
     }
   }
 
-  Future<User> register(String email, String password) async {
+  Future<User> register(
+      String email,
+      String password,
+      String name,
+      String? gender,
+      String cpf,
+      String phone,
+      String birthday,
+      String cep,
+      ) async {
     final url = Uri.parse('$_baseUrl/users/');
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'email': email, 'password': password}),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'email': email,
+        'password': password,
+        'name': name,
+        'gender': gender,
+        'cpf': cpf,
+        'phone': phone,
+        'birthday': birthday,
+        'cep': cep,
+      }),
     );
 
     if (response.statusCode == 200) {

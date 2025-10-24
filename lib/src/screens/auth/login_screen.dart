@@ -126,10 +126,10 @@ class _LoginScreenState extends State<LoginScreen> {
       decoration: const BoxDecoration(
         color: AppColors.accent, // Background for safety
         // Placeholder for the large image
-        image: DecorationImage(
-          image: AssetImage('images/doctors_login.png'),
-          fit: BoxFit.cover,
-        ),
+        // image: DecorationImage(
+        //   image: AssetImage('images/doctors_login.png'),
+        //   fit: BoxFit.cover,
+        // ),
       ),
       child: Container(
         // Apply a subtle dark overlay at the bottom for text contrast
