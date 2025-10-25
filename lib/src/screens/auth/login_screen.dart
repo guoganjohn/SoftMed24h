@@ -13,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
 
   @override
   void dispose() {
@@ -349,7 +350,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: TextFormField(
         controller: controller,
-        obscureText: isPassword,
+        obscureText: isPassword ? _obscureText : false,
         validator: validator,
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -358,7 +359,17 @@ class _LoginScreenState extends State<LoginScreen> {
             vertical: 15,
           ),
           suffixIcon: isPassword
-              ? const Icon(Icons.visibility_outlined, color: AppColors.primary)
+              ? IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    color: AppColors.primary,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                )
               : null,
         ),
         style: const TextStyle(fontSize: 16, color: AppColors.text),
