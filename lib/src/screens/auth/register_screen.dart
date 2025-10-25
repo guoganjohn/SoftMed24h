@@ -74,11 +74,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void _showSnackBar(String message, Color color) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
-  }
 
   // --- App Bar ---
 
