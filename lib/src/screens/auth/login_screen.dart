@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:softmed24h/src/utils/api_service.dart';
+import 'package:softmed24h/src/utils/app_colors.dart';
 import 'package:softmed24h/src/widgets/app_button.dart';
-
-// Placeholder class for AppColors
-class AppColors {
-  static const Color primary = Color(
-    0xFF039BE5,
-  ); // Deep Sky Blue (for buttons and text)
-  static const Color secondary = Color(0xFFFFFFFF); // White (for backgrounds)
-  static const Color accent = Color(0xFF1E88E5); // Medium Blue
-  static const Color text = Color(0xFF424242); // Greyish text
-}
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -60,28 +51,40 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Row(
           children: [
             // Logo Placeholder (e.g., Image.asset('images/logo.png'))
-            GestureDetector(
-              onTap: () {
-                Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil('/', (route) => false);
-              },
-              child: const Row(
-                children: [
-                  Text(
-                    'MeuMed',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(
+                    context,
+                  ).pushNamedAndRemoveUntil('/', (route) => false);
+                },
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/logo.png',
+                      height: 40,
                     ),
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    'Nosso plano é a sua saúde',
-                    style: TextStyle(color: AppColors.text, fontSize: 12),
-                  ),
-                ],
+                    const SizedBox(width: 10),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'MeuMed',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          'Nosso plano é a sua saúde',
+                          style: TextStyle(color: AppColors.text, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const Spacer(),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:softmed24h/src/utils/app_colors.dart';
+import 'package:softmed24h/src/widgets/app_button.dart';
 
 // --- ENUM FOR PAYMENT METHOD ---
 enum PaymentMethod { creditCard, pixBoleto }
@@ -12,7 +14,8 @@ class PaymentScreen extends StatefulWidget {
   State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
+class _PaymentScreenState extends State<PaymentScreen>
+    with SingleTickerProviderStateMixin {
   PaymentMethod _selectedPaymentMethod = PaymentMethod.creditCard;
   bool _saveCardChecked = false;
 
@@ -27,9 +30,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   // Global key for form validation
   final _formKey = GlobalKey<FormState>();
+  TabController? _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController!.addListener(() {
+      setState(() {}); // To rebuild the widget when tab changes
+    });
+  }
 
   @override
   void dispose() {
+    _tabController?.dispose();
     _nameController.dispose();
     _cardNumberController.dispose();
     _expiryController.dispose();
@@ -58,6 +72,47 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: AppColors.secondary,
+      elevation: 0,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/home', (route) => false);
+              },
+              child: const Text(
+                'Minha Conta',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            const Spacer(),
+            AppButton(
+              label: 'Sair',
+              width: 150,
+              height: 40,
+              fontSize: 18,
+              icon: Icons.logout,
+              iconSize: 20,
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/login');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Determine the maximum width for the form card on large screens
@@ -65,18 +120,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final contentWidth = screenWidth > 800 ? 700.0 : screenWidth * 0.9;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Minha Conta | Sair'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Icon(Icons.whatshot, color: Colors.green),
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(context),
       body: SingleChildScrollView(
         child: Center(
           child: Container(
@@ -103,18 +147,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         children: <Widget>[
                           // Tabs (Mocked as just Payment)
                           _buildTabs(),
-                          const Divider(height: 32),
-                          // Plan Details
-                          _buildPlanDetails(),
-                          const Divider(height: 32),
-                          // Order Data
-                          _buildOrderData(),
-                          const Divider(height: 32),
-                          // Account Data
-                          _buildAccountData(),
-                          const Divider(height: 32),
-                          // Payment Data (Credit Card Form)
-                          _buildPaymentData(),
+                          const SizedBox(height: 32),
+                          if (_tabController?.index == 0)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Plan Details
+                                _buildPlanDetails(),
+                                const Divider(height: 32),
+                                // Order Data
+                                _buildOrderData(),
+                                const Divider(height: 32),
+                                // Account Data
+                                _buildAccountData(),
+                                const Divider(height: 32),
+                                // Payment Data (Credit Card Form)
+                                _buildPaymentData(),
+                              ],
+                            )
+                          else
+                            _buildEmptyHistory(),
                         ],
                       ),
                     ),
@@ -122,7 +174,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
                 const SizedBox(height: 24),
                 // Payment Button
-                _buildPaymentButton(),
+                if (_tabController?.index == 0) _buildPaymentButton(),
                 const SizedBox(height: 24),
                 // Legal Disclaimer
                 _buildLegalDisclaimer(),
@@ -162,23 +214,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget _buildTabs() {
-    // Only 'Pagamento' (Payment) is active based on the screenshot
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade700,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: const Text('Pagamento', style: TextStyle(color: Colors.white)),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          'Histórico de Pagamentos',
-          style: TextStyle(color: Colors.grey.shade600),
-        ),
+    return TabBar(
+      controller: _tabController,
+      tabs: const [
+        Tab(text: 'Pagamento'),
+        Tab(text: 'Histórico de Pagamentos'),
       ],
+      labelColor: Colors.white,
+      unselectedLabelColor: Colors.grey.shade600,
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicator: BoxDecoration(
+        color: Colors.blue.shade700,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
+  }
+
+  Widget _buildEmptyHistory() {
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 48.0),
+        child: Text(
+          'Nenhum histórico de pagamento encontrado.',
+          style: TextStyle(color: Colors.grey, fontSize: 16),
+        ),
+      ),
     );
   }
 
@@ -196,17 +256,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
           // Left side: Icon and Title
           Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade700,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.local_hospital,
-                  color: Colors.white,
-                  size: 30,
-                ),
+              Image.asset(
+                'assets/images/logo.png',
+                height: 40,
               ),
               const SizedBox(height: 8),
               const Text(

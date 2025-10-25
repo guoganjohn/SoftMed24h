@@ -8,6 +8,8 @@ class AppButton extends StatelessWidget {
   final double height;
   final double fontSize;
   final VoidCallback? onPressed;
+  final IconData icon;
+  final double? iconSize;
 
   const AppButton({
     super.key,
@@ -16,6 +18,8 @@ class AppButton extends StatelessWidget {
     this.height = 47, // Default height
     this.fontSize = 25, // Default font size
     this.onPressed, // Expose onPressed
+    this.icon = Icons.chevron_right,
+    this.iconSize,
   });
 
   @override
@@ -39,14 +43,18 @@ class AppButton extends StatelessWidget {
             Positioned(
               left: 4,
               child: Container(
+                width: height - 5,
+                height: height - 5,
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.chevron_right,
-                  size: height - 5,
-                  color: AppColors.primary,
+                child: Center(
+                  child: Icon(
+                    icon,
+                    size: iconSize ?? (height - 5) * 0.7,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ),

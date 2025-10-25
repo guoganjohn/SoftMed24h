@@ -22,7 +22,29 @@ class HeaderSection extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset('images/logo.png', height: 40),
+                    Row(
+                      children: [
+                        Image.asset('images/logo.png', height: 40),
+                        const SizedBox(width: 10),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'MeuMed',
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Text(
+                              'Nosso plano é a sua saúde',
+                              style: TextStyle(color: AppColors.text, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                     Row(
                       children: [
                         TextButton(
@@ -57,7 +79,30 @@ class HeaderSection extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: Column(
                     children: [
-                      Image.asset('images/logo.png', height: 40),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center, // Center the logo and text
+                        children: [
+                          Image.asset('images/logo.png', height: 40),
+                          const SizedBox(width: 10),
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'MeuMed',
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Text(
+                                'Nosso plano é a sua saúde',
+                                style: TextStyle(color: AppColors.text, fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

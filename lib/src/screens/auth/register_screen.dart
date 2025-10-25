@@ -1,21 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:softmed24h/src/utils/api_service.dart';
-import 'package:softmed24h/src/widgets/app_button.dart';
 import 'package:flutter/services.dart'; // Required for FilteringTextInputFormatter
+import 'package:softmed24h/src/utils/app_colors.dart';
 import 'package:softmed24h/src/utils/input_formatters.dart';
-
-// Placeholder class for AppColors (Copied from LoginScreen for consistency)
-class AppColors {
-  static const Color primary = Color(
-    0xFF039BE5,
-  ); // Deep Sky Blue (for buttons and text)
-  static const Color secondary = Color(0xFFFFFFFF); // White (for backgrounds)
-  static const Color accent = Color(0xFF1E88E5); // Medium Blue
-  static const Color text = Color(0xFF424242); // Greyish text
-  static const Color background = Color(
-    0xFFF7F7F7,
-  ); // Light background for form
-}
+import 'package:softmed24h/src/widgets/app_button.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -105,28 +92,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Row(
           children: [
             // Logo Placeholder (e.g., Image.asset('images/logo.png'))
-            GestureDetector(
-              onTap: () {
-                Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil('/', (route) => false);
-              },
-              child: const Row(
-                children: [
-                  Text(
-                    'MeuMed',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(
+                    context,
+                  ).pushNamedAndRemoveUntil('/', (route) => false);
+                },
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/logo.png',
+                      height: 40,
                     ),
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    'Nosso plano é a sua saúde',
-                    style: TextStyle(color: AppColors.text, fontSize: 12),
-                  ),
-                ],
+                    const SizedBox(width: 10),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'MeuMed',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          'Nosso plano é a sua saúde',
+                          style: TextStyle(color: AppColors.text, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const Spacer(),
@@ -221,7 +220,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 return 'Please enter your CPF';
               }
               // Basic CPF length validation (adjust as needed for specific format)
-              if (value.length != 14) { // CPF with mask is 14 characters long
+              if (value.length != 14) {
+                // CPF with mask is 14 characters long
                 return 'CPF must be 14 characters long';
               }
               return null;
@@ -243,7 +243,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               // Masked phone number length: (XX) XXXX-XXXX is 14 characters
               // Masked phone number length: (XX) XXXXX-XXXX is 15 characters (for 9-digit numbers)
               // Let's assume 11 digits (2 DDD + 9 number) for now, which is 15 masked characters
-              if (value.length < 14) { // Minimum length for (XX) XXXX-XXXX
+              if (value.length < 14) {
+                // Minimum length for (XX) XXXX-XXXX
                 return 'Please enter a valid phone number';
               }
               return null;
@@ -273,23 +274,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
           // 6. Address Header and Input (Replicating Image Layout)
           _buildAddressHeader(),
-                    _buildAddressField(
-                      'CEP:', '',
-                      hasChangeButton: false,
-                      controller: _cepController,
-                      inputFormatters: [CepInputFormatter()], // Apply CEP mask
-                      hintText: 'XXXXX-XXX', // Placeholder for CEP
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your CEP';
-                        }
-                        // Masked CEP length: XXXXX-XXX is 9 characters
-                        if (value.length != 9) {
-                          return 'CEP must be 9 characters long';
-                        }
-                        return null;
-                      },
-                    ),
+          _buildAddressField(
+            'CEP:',
+            '',
+            hasChangeButton: false,
+            controller: _cepController,
+            inputFormatters: [CepInputFormatter()], // Apply CEP mask
+            hintText: 'XXXXX-XXX', // Placeholder for CEP
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your CEP';
+              }
+              // Masked CEP length: XXXXX-XXX is 9 characters
+              if (value.length != 9) {
+                return 'CEP must be 9 characters long';
+              }
+              return null;
+            },
+          ),
           const SizedBox(height: 20),
 
           // 7. Password
@@ -342,47 +344,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 40,
                 fontSize: 18,
                 onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    if (!_acceptTerms) {
-                      _showSnackBar(
-                        'You must accept the terms and conditions',
-                        Colors.red,
-                      );
-                      return;
-                    }
-                    if (_selectedGender == null) {
-                      _showSnackBar('Please select your gender', Colors.red);
-                      return;
-                    }
-                    // Password match check is now handled by the validator in _buildTextField
-
-                    final apiService = ApiService();
-                    try {
-                                          // Reformat birthday from DD/MM/YYYY to YYYY-MM-DD
-                                          final List<String> dobParts = _dobController.text.split('/');
-                                          final String formattedBirthday = '${dobParts[2]}-${dobParts[1]}-${dobParts[0]}';
-                      
-                                          await apiService.register(
-                                            _emailController.text,
-                                            _passwordController.text,
-                                            _nameController.text,
-                                            _selectedGender,
-                                            _cpfController.text,
-                                            _phoneController.text,
-                                            formattedBirthday,
-                                            _cepController.text,
-                                          );                      _showSnackBar(
-                        'Registration successful! Please login.',
-                        Colors.green,
-                      );
-                      Navigator.of(context).pushReplacementNamed('/login');
-                    } catch (e) {
-                      _showSnackBar(
-                        'Registration failed: ${e.toString()}',
-                        Colors.red,
-                      );
-                    }
-                  }
+                  // if (_formKey.currentState!.validate()) {
+                  //   if (!_acceptTerms) {
+                  //     _showSnackBar(
+                  //       'You must accept the terms and conditions',
+                  //       Colors.red,
+                  //     );
+                  //     return;
+                  //   }
+                  //   if (_selectedGender == null) {
+                  //     _showSnackBar('Please select your gender', Colors.red);
+                  //     return;
+                  //   }
+                  //   // Password match check is now handled by the validator in _buildTextField
+                  //
+                  //   final apiService = ApiService();
+                  //   try {
+                  //     // Reformat birthday from DD/MM/YYYY to YYYY-MM-DD
+                  //     final List<String> dobParts = _dobController.text.split(
+                  //       '/',
+                  //     );
+                  //     final String formattedBirthday =
+                  //         '${dobParts[2]}-${dobParts[1]}-${dobParts[0]}';
+                  //
+                  //     await apiService.register(
+                  //       _emailController.text,
+                  //       _passwordController.text,
+                  //       _nameController.text,
+                  //       _selectedGender,
+                  //       _cpfController.text,
+                  //       _phoneController.text,
+                  //       formattedBirthday,
+                  //       _cepController.text,
+                  //     );
+                  //     _showSnackBar(
+                  //       'Registration successful! Please login.',
+                  //       Colors.green,
+                  //     );
+                  //     Navigator.of(context).pushReplacementNamed('/login');
+                  //   } catch (e) {
+                  //     _showSnackBar(
+                  //       'Registration failed: ${e.toString()}',
+                  //       Colors.red,
+                  //     );
+                  //   }
+                  // }
+                  Navigator.of(context).pushReplacementNamed('/payment');
                 },
               ),
             ),
@@ -647,83 +654,64 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   // --- Helper Widgets (Reused from Login Screen) ---
 
-      Widget _buildTextField({
+  Widget _buildTextField({
+    bool isPassword = false,
 
-        bool isPassword = false,
+    TextInputType keyboardType = TextInputType.text,
 
-        TextInputType keyboardType = TextInputType.text,
+    String? initialValue,
 
-        String? initialValue,
+    TextEditingController? controller,
 
-        TextEditingController? controller,
+    String? Function(String?)? validator,
 
-        String? Function(String?)? validator,
+    List<TextInputFormatter>? inputFormatters,
 
-        List<TextInputFormatter>? inputFormatters,
+    String? hintText,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0F4F8), // Light grey background
 
-        String? hintText,
+        borderRadius: BorderRadius.circular(4),
 
-      }) {
+        border: Border.all(color: const Color(0xFFE0E0E0)),
+      ),
 
-        return Container(
+      child: TextFormField(
+        // Changed to TextFormField
+        obscureText: isPassword,
 
-          decoration: BoxDecoration(
+        keyboardType: keyboardType,
 
-            color: const Color(0xFFF0F4F8), // Light grey background
+        controller:
+            controller ??
+            (initialValue != null
+                ? TextEditingController(text: initialValue)
+                : null),
 
-            borderRadius: BorderRadius.circular(4),
+        validator: validator, // Applied validator
 
-            border: Border.all(color: const Color(0xFFE0E0E0)),
+        inputFormatters: inputFormatters, // Applied inputFormatters
 
+        decoration: InputDecoration(
+          hintText: hintText, // Added hintText
+
+          border: InputBorder.none,
+
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 15,
+
+            vertical: 15,
           ),
 
-          child: TextFormField( // Changed to TextFormField
+          suffixIcon: isPassword
+              ? const Icon(Icons.visibility_outlined, color: AppColors.primary)
+              : null,
+        ),
 
-            obscureText: isPassword,
-
-            keyboardType: keyboardType,
-
-            controller:
-
-                controller ??
-
-                (initialValue != null
-
-                    ? TextEditingController(text: initialValue)
-
-                    : null),
-
-            validator: validator, // Applied validator
-
-            inputFormatters: inputFormatters, // Applied inputFormatters
-
-            decoration: InputDecoration(
-
-              hintText: hintText, // Added hintText
-
-              border: InputBorder.none,
-
-              contentPadding: const EdgeInsets.symmetric(
-
-                horizontal: 15,
-
-                vertical: 15,
-
-              ),
-
-              suffixIcon: isPassword
-
-                  ? const Icon(Icons.visibility_outlined, color: AppColors.primary)
-
-                  : null,
-
-            ),
-
-            style: const TextStyle(fontSize: 16, color: AppColors.text),
-
-          ),
-
-        );
-
-      }
+        style: const TextStyle(fontSize: 16, color: AppColors.text),
+      ),
+    );
+  }
 }
