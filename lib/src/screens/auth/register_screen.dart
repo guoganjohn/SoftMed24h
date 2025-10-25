@@ -23,6 +23,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
 
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
   bool _acceptTerms = false; // State for terms and conditions checkbox
   String? _selectedGender; // State for selected gender
 
@@ -293,6 +296,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           _buildFormLabel('Senha', mandatory: true),
           _buildTextField(
             isPassword: true,
+            obscureText: _obscurePassword,
             controller: _passwordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -303,6 +307,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               }
               return null;
             },
+            onToggleVisibility: () {
+              setState(() {
+                _obscurePassword = !_obscurePassword;
+              });
+            },
           ),
           const SizedBox(height: 20),
 
@@ -310,6 +319,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           _buildFormLabel('Confirme a senha', mandatory: true),
           _buildTextField(
             isPassword: true,
+            obscureText: _obscureConfirmPassword,
             controller: _confirmPasswordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -319,6 +329,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 return 'Passwords do not match';
               }
               return null;
+            },
+            onToggleVisibility: () {
+              setState(() {
+                _obscureConfirmPassword = !_obscureConfirmPassword;
+              });
             },
           ),
           const SizedBox(height: 30),
@@ -651,60 +666,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildTextField({
     bool isPassword = false,
-
+    bool obscureText = false,
+    VoidCallback? onToggleVisibility,
     TextInputType keyboardType = TextInputType.text,
-
     String? initialValue,
-
     TextEditingController? controller,
-
     String? Function(String?)? validator,
-
     List<TextInputFormatter>? inputFormatters,
-
     String? hintText,
   }) {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFF0F4F8), // Light grey background
-
         borderRadius: BorderRadius.circular(4),
-
         border: Border.all(color: const Color(0xFFE0E0E0)),
       ),
-
       child: TextFormField(
         // Changed to TextFormField
-        obscureText: isPassword,
-
+        obscureText: obscureText,
         keyboardType: keyboardType,
-
         controller:
             controller ??
             (initialValue != null
                 ? TextEditingController(text: initialValue)
                 : null),
-
         validator: validator, // Applied validator
-
         inputFormatters: inputFormatters, // Applied inputFormatters
-
         decoration: InputDecoration(
           hintText: hintText, // Added hintText
-
           border: InputBorder.none,
-
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 15,
-
             vertical: 15,
           ),
-
           suffixIcon: isPassword
-              ? const Icon(Icons.visibility_outlined, color: AppColors.primary)
+              ? IconButton(
+                  icon: Icon(
+                    obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    color: AppColors.primary,
+                  ),
+                  onPressed: onToggleVisibility,
+                )
               : null,
         ),
-
         style: const TextStyle(fontSize: 16, color: AppColors.text),
       ),
     );
