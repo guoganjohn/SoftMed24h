@@ -194,84 +194,117 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   // Right Section (Form)
   Widget _buildFormSection(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(40.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Bem-vindo ao MeuMed!',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: AppColors.text,
-            ),
-          ),
-          const SizedBox(height: 5),
-          const Text(
-            'Preencha os campos abaixo.',
-            style: TextStyle(fontSize: 18, color: AppColors.text),
-          ),
-          const SizedBox(height: 40),
-
-          // Email/CPF Field
-          const Text('E-mail ou CPF', style: TextStyle(color: AppColors.text)),
-          const SizedBox(height: 8),
-          _buildTextField(controller: _emailController),
-          const SizedBox(height: 20),
-
-          // Password Field
-          const Text('Senha', style: TextStyle(color: AppColors.text)),
-          const SizedBox(height: 8),
-          _buildTextField(isPassword: true, controller: _passwordController),
-
-          // Forgot Password
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {},
-              child: const Text(
-                'Esqueceu a senha?',
-                style: TextStyle(color: AppColors.primary),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Bem-vindo ao MeuMed!',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: AppColors.text,
               ),
             ),
-          ),
+            const SizedBox(height: 5),
+            const Text(
+              'Preencha os campos abaixo.',
+              style: TextStyle(fontSize: 18, color: AppColors.text),
+            ),
+            const SizedBox(height: 40),
 
-          const SizedBox(height: 30),
+            // Email/CPF Field
+            const Text('E-mail ou CPF', style: TextStyle(color: AppColors.text)),
+            const SizedBox(height: 8),
+            _buildTextField(
+              controller: _emailController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Por favor, insira seu e-mail ou CPF.';
+                }
+                // Regex for email validation
+                final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                if (!emailRegex.hasMatch(value)) {
+                  return 'Por favor, insira um e-mail válido.';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 20),
 
-          // Login Button
-          SizedBox(
-            width: double.infinity,
-            child: Container(
-              alignment: Alignment.center,
-              child: AppButton(
-                label: 'Entrar',
-                width: 200,
-                height: 40,
-                fontSize: 18,
-                onPressed: () async {
-                  final apiService = ApiService();
-                  try {
-                    final authResponse = await apiService.login(
-                      _emailController.text,
-                      _passwordController.text,
-                    );
-                    _showSnackBar(
-                      'Login successful! Token: ${authResponse.accessToken}',
-                      Colors.green,
-                    );
-                    Navigator.of(context).pushReplacementNamed('/home');
-                  } catch (e) {
-                    _showSnackBar('Login failed: ${e.toString()}', Colors.red);
-                  }
-                },
+            // Password Field
+            const Text('Senha', style: TextStyle(color: AppColors.text)),
+            const SizedBox(height: 8),
+            _buildTextField(
+              isPassword: true,
+              controller: _passwordController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Por favor, insira sua senha.';
+                }
+                if (value.length < 6) {
+                  return 'A senha deve ter pelo menos 6 caracteres.';
+                }
+                return null;
+              },
+            ),
+
+            // Forgot Password
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Esqueceu a senha?',
+                  style: TextStyle(color: AppColors.primary),
+                ),
               ),
             ),
-          ),
-        ],
+
+            const SizedBox(height: 30),
+
+            // Login Button
+            SizedBox(
+              width: double.infinity,
+              child: Container(
+                alignment: Alignment.center,
+                child: AppButton(
+                  label: 'Entrar',
+                  width: 200,
+                  height: 40,
+                  fontSize: 18,
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      final apiService = ApiService();
+                      try {
+                        final authResponse = await apiService.login(
+                          _emailController.text,
+                          _passwordController.text,
+                        );
+                        _showSnackBar(
+                          'Login successful! Token: ${authResponse.accessToken}',
+                          Colors.green,
+                        );
+                        Navigator.of(context).pushReplacementNamed('/home');
+                      } catch (e) {
+                        _showSnackBar(
+                            'Login failed: ${e.toString()}', Colors.red);
+                      }
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -306,6 +339,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildTextField({
     bool isPassword = false,
     required TextEditingController controller,
+    String? Function(String?)? validator,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -313,9 +347,10 @@ class _LoginScreenState extends State<LoginScreen> {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: const Color(0xFFE0E0E0)),
       ),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         obscureText: isPassword,
+        validator: validator,
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
