@@ -389,10 +389,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _cepController.text,
                       );
                       _showSnackBar(
-                        'Cadastro realizado com sucesso! Por favor, faça o login.',
+                        'Cadastro realizado com sucesso! Por favor, faça o pagamento.',
                         Colors.green,
                       );
-                      Navigator.of(context).pushReplacementNamed('/login');
+                      Navigator.of(context).pushReplacementNamed('/payment');
                     } catch (e) {
                       _showSnackBar(
                         'Falha no cadastro: ${e.toString()}',
@@ -400,7 +400,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       );
                     }
                   }
-                  Navigator.of(context).pushReplacementNamed('/payment');
                 },
               ),
             ),
@@ -576,7 +575,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       children: [
         _buildFormLabel(label, mandatory: true),
         Container(
-          height: 50, // Fixed height for visual alignment
           decoration: BoxDecoration(
             color: const Color(0xFFF0F4F8), // Light grey background
             borderRadius: BorderRadius.circular(4),
