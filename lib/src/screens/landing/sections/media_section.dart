@@ -25,15 +25,15 @@ class _MediaSectionState extends State<MediaSection> {
 
   final List<MediaItem> _mediaItems = [
     MediaItem(
-      imagePath: 'images/banner.png',
+      imagePath: 'assets/images/banner.png',
       url: 'https://globo.com',
     ), // Placeholder URL
     MediaItem(
-      imagePath: 'images/banner.png',
+      imagePath: 'assets/images/banner.png',
       url: 'https://r7.com',
     ), // Placeholder URL
     MediaItem(
-      imagePath: 'images/banner.png',
+      imagePath: 'assets/images/banner.png',
       url: 'https://uol.com.br',
     ), // Placeholder URL
   ];

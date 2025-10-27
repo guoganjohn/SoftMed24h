@@ -83836,7 +83836,7 @@ s=A.qA(B.a6,1)
 return A.cw(new A.be(B.j5,A.mC(B.fg,A.b([q,A.t3(r,A.cf(r,A.dc(A.bk(this.c,r,r,r,r,B.Th,r,r),r,r),B.u,r,r,new A.c2(B.ak,r,s,r,r,r,B.e2),r,60,r,r,r,r,60),r,r,r,r,0,r)],t.p),B.u,B.c5),r),r,300)}}
 A.m3.prototype={}
 A.yP.prototype={
-ah(){var s="images/banner.png"
+ah(){var s="assets/images/banner.png"
 return new A.QW(A.b([new A.m3(s,"https://globo.com"),new A.m3(s,"https://r7.com"),new A.m3(s,"https://uol.com.br")],t.uu))}}
 A.QW.prototype={
 ar(){var s=this
