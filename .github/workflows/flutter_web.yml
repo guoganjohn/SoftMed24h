@@ -1,0 +1,36 @@
+name: Flutter Web CI/CD
+
+on: 
+  push:
+    branches:
+      - master # Trigger on pushes to the master branch
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' # Or 'beta', 'dev' depending on your needs
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test # Optional: Remove if you don't want to run tests in CI
+
+      - name: Build Web
+        run: flutter build web --release --output softmed24h
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/master' # Deploy only from master branch
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./softmed24h # The directory containing your built web app
+          publish_branch: gh-pages # The branch to deploy to
