@@ -39,6 +39,28 @@ class ApiService {
     }
   }
 
+  Future<void> resetPassword(
+      String token, String newPassword, String confirmNewPassword) async {
+    final url = Uri.parse('$_baseUrl/reset-password'); // Assuming this endpoint
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'token': token,
+        'new_password': newPassword,
+        'confirm_password': confirmNewPassword,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception('Failed to reset password: ${response.body}');
+    }
+  }
+
   Future<User> register(
       String email,
       String password,

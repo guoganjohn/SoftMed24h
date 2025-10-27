@@ -7,8 +7,11 @@ import 'package:softmed24h/src/screens/forget_password/reset_password_screen.dar
 import 'package:softmed24h/src/screens/home/home_page.dart';
 import 'package:softmed24h/src/screens/landing/landing_screen.dart';
 import 'package:softmed24h/src/screens/payment/payment_screen.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:softmed24h/src/screens/forget_password/token_error_screen.dart';
 
 void main() {
+  usePathUrlStrategy();
   runApp(const MyApp());
 }
 
@@ -25,16 +28,36 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Montserrat',
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const LandingPage(),
-        '/login': (context) => const LoginScreen(),
-        '/register': (context) => const RegisterScreen(),
-        '/home': (context) => const HomePage(),
-        '/payment': (context) => const PaymentScreen(),
-        '/forgot-password': (context) => const ForgetPasswordScreen(),
-        '/email-sent': (context) => const EmailSentScreen(),
-        '/reset-password': (context) => const ResetPasswordScreen(),
+      onGenerateRoute: (settings) {
+        if (settings.name?.startsWith('/reset-password') == true) {
+          final uri = Uri.parse(settings.name!);
+          final token = uri.queryParameters['token'];
+          if (token == null || token.isEmpty) {
+            return MaterialPageRoute(builder: (context) => const TokenErrorScreen());
+          }
+          return MaterialPageRoute(builder: (context) => ResetPasswordScreen(token: token));
+        }
+        // Handle other routes
+        return MaterialPageRoute(builder: (context) {
+          switch (settings.name) {
+            case '/':
+              return const LandingPage();
+            case '/login':
+              return const LoginScreen();
+            case '/register':
+              return const RegisterScreen();
+            case '/home':
+              return const HomePage();
+            case '/payment':
+              return const PaymentScreen();
+            case '/forgot-password':
+              return const ForgetPasswordScreen();
+            case '/email-sent':
+              return const EmailSentScreen();
+            default:
+              return const Text('Error: Unknown route'); // Or a 404 page
+          }
+        });
       },
     );
   }
