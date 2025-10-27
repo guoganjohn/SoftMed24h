@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:softmed24h/src/utils/api_service.dart';
 import 'package:flutter/services.dart'; // Required for FilteringTextInputFormatter
 import 'package:softmed24h/src/utils/app_colors.dart';
 import 'package:softmed24h/src/utils/input_formatters.dart';
@@ -176,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: _nameController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your name';
+                return 'Por favor, insira seu nome';
               }
               return null;
             },
@@ -190,12 +191,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: _emailController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your email';
+                return 'Por favor, insira seu e-mail';
               }
               if (!RegExp(
                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
               ).hasMatch(value)) {
-                return 'Please enter a valid email';
+                return 'Por favor, insira um e-mail válido';
               }
               return null;
             },
@@ -212,15 +213,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             keyboardType: TextInputType.number,
             controller: _cpfController,
             inputFormatters: [CpfInputFormatter()], // Apply CPF mask
-            hintText: 'XXX.XXX.XXX-XX', // Placeholder for CPF
+            hintText: '000.000.000-00', // Placeholder for CPF
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your CPF';
+                return 'Por favor, insira seu CPF';
               }
               // Basic CPF length validation (adjust as needed for specific format)
               if (value.length != 14) {
                 // CPF with mask is 14 characters long
-                return 'CPF must be 14 characters long';
+                return 'O CPF deve ter 14 caracteres';
               }
               return null;
             },
@@ -233,17 +234,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             keyboardType: TextInputType.phone,
             controller: _phoneController,
             inputFormatters: [PhoneInputFormatter()], // Apply phone mask
-            hintText: '(XX) XXXX-XXXX', // Placeholder for phone number
+            hintText: '(00) 0000-0000', // Placeholder for phone number
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your phone number';
+                return 'Por favor, insira seu número de telefone';
               }
               // Masked phone number length: (XX) XXXX-XXXX is 14 characters
               // Masked phone number length: (XX) XXXXX-XXXX is 15 characters (for 9-digit numbers)
               // Let's assume 11 digits (2 DDD + 9 number) for now, which is 15 masked characters
               if (value.length < 14) {
                 // Minimum length for (XX) XXXX-XXXX
-                return 'Please enter a valid phone number';
+                return 'Por favor, insira um número de telefone válido';
               }
               return null;
             },
@@ -259,11 +260,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             hintText: 'DD/MM/YYYY', // Placeholder for date of birth
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your date of birth';
+                return 'Por favor, insira sua data de nascimento';
               }
               // Masked date length: DD/MM/YYYY is 10 characters
               if (value.length != 10) {
-                return 'Please enter a valid date (DD/MM/YYYY)';
+                return 'Por favor, insira uma data válida (DD/MM/YYYY)';
               }
               return null;
             },
@@ -278,14 +279,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             hasChangeButton: false,
             controller: _cepController,
             inputFormatters: [CepInputFormatter()], // Apply CEP mask
-            hintText: 'XXXXX-XXX', // Placeholder for CEP
+            hintText: '00000-000', // Placeholder for CEP
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter your CEP';
+                return 'Por favor, insira seu CEP';
               }
               // Masked CEP length: XXXXX-XXX is 9 characters
               if (value.length != 9) {
-                return 'CEP must be 9 characters long';
+                return 'O CEP deve ter 9 caracteres';
               }
               return null;
             },
@@ -300,10 +301,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: _passwordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter a password';
+                return 'Por favor, insira uma senha';
               }
               if (value.length < 6) {
-                return 'Password must be at least 6 characters long';
+                return 'A senha deve ter pelo menos 6 caracteres';
               }
               return null;
             },
@@ -323,10 +324,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             controller: _confirmPasswordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please confirm your password';
+                return 'Por favor, confirme sua senha';
               }
               if (value != _passwordController.text) {
-                return 'Passwords do not match';
+                return 'As senhas não correspondem';
               }
               return null;
             },
@@ -354,51 +355,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 40,
                 fontSize: 18,
                 onPressed: () async {
-                  // if (_formKey.currentState!.validate()) {
-                  //   if (!_acceptTerms) {
-                  //     _showSnackBar(
-                  //       'You must accept the terms and conditions',
-                  //       Colors.red,
-                  //     );
-                  //     return;
-                  //   }
-                  //   if (_selectedGender == null) {
-                  //     _showSnackBar('Please select your gender', Colors.red);
-                  //     return;
-                  //   }
-                  //   // Password match check is now handled by the validator in _buildTextField
-                  //
-                  //   final apiService = ApiService();
-                  //   try {
-                  //     // Reformat birthday from DD/MM/YYYY to YYYY-MM-DD
-                  //     final List<String> dobParts = _dobController.text.split(
-                  //       '/',
-                  //     );
-                  //     final String formattedBirthday =
-                  //         '${dobParts[2]}-${dobParts[1]}-${dobParts[0]}';
-                  //
-                  //     await apiService.register(
-                  //       _emailController.text,
-                  //       _passwordController.text,
-                  //       _nameController.text,
-                  //       _selectedGender,
-                  //       _cpfController.text,
-                  //       _phoneController.text,
-                  //       formattedBirthday,
-                  //       _cepController.text,
-                  //     );
-                  //     _showSnackBar(
-                  //       'Registration successful! Please login.',
-                  //       Colors.green,
-                  //     );
-                  //     Navigator.of(context).pushReplacementNamed('/login');
-                  //   } catch (e) {
-                  //     _showSnackBar(
-                  //       'Registration failed: ${e.toString()}',
-                  //       Colors.red,
-                  //     );
-                  //   }
-                  // }
+                  if (_formKey.currentState!.validate()) {
+                    if (!_acceptTerms) {
+                      _showSnackBar(
+                        'Você deve aceitar os termos e condições',
+                        Colors.red,
+                      );
+                      return;
+                    }
+                    if (_selectedGender == null) {
+                      _showSnackBar('Por favor, selecione seu gênero', Colors.red);
+                      return;
+                    }
+                    // Password match check is now handled by the validator in _buildTextField
+                  
+                    final apiService = ApiService();
+                    try {
+                      // Reformat birthday from DD/MM/YYYY to YYYY-MM-DD
+                      final List<String> dobParts = _dobController.text.split(
+                        '/',
+                      );
+                      final String formattedBirthday =
+                          '${dobParts[2]}-${dobParts[1]}-${dobParts[0]}';
+                  
+                      await apiService.register(
+                        _emailController.text,
+                        _passwordController.text,
+                        _nameController.text,
+                        _selectedGender,
+                        _cpfController.text,
+                        _phoneController.text,
+                        formattedBirthday,
+                        _cepController.text,
+                      );
+                      _showSnackBar(
+                        'Cadastro realizado com sucesso! Por favor, faça o login.',
+                        Colors.green,
+                      );
+                      Navigator.of(context).pushReplacementNamed('/login');
+                    } catch (e) {
+                      _showSnackBar(
+                        'Falha no cadastro: ${e.toString()}',
+                        Colors.red,
+                      );
+                    }
+                  }
                   Navigator.of(context).pushReplacementNamed('/payment');
                 },
               ),
@@ -407,6 +408,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ],
       ),
     );
+  }
+  
+  void _showSnackBar(String message, Color color) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 
   // --- Field/Layout Helpers ---

@@ -1,5 +1,5 @@
-from sqlalchemy import Boolean, Column, Integer, String, Date
-from datetime import date
+from sqlalchemy import Boolean, Column, Integer, String, Date, DateTime
+from datetime import date, datetime
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -18,6 +18,10 @@ class User(Base):
     phone = Column(String)
     birthday = Column(Date)
     cep = Column(String)
+
+    # Password reset fields
+    password_reset_token = Column(String, nullable=True)
+    password_reset_expires_at = Column(DateTime, nullable=True)
 
     medical_records = relationship("MedicalRecord", back_populates="patient")
     prescriptions = relationship("Prescription", foreign_keys="[Prescription.patient_id]", back_populates="patient")

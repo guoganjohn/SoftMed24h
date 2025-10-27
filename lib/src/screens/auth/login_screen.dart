@@ -262,7 +262,9 @@ class _LoginScreenState extends State<LoginScreen> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/forgot-password');
+                },
                 child: const Text(
                   'Esqueceu a senha?',
                   style: TextStyle(color: AppColors.primary),
@@ -291,13 +293,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           _passwordController.text,
                         );
                         _showSnackBar(
-                          'Login successful! Token: ${authResponse.accessToken}',
+                          'Login realizado com sucesso! Token: ${authResponse.accessToken}',
                           Colors.green,
                         );
                         Navigator.of(context).pushReplacementNamed('/home');
                       } catch (e) {
                         _showSnackBar(
-                            'Login failed: ${e.toString()}', Colors.red);
+                            'Falha no login: ${e.toString()}', Colors.red);
                       }
                     }
                   },

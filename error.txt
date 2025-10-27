@@ -1,0 +1,53 @@
+DartError: FormatException: Illegal RegExp pattern:
+^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-Z]+, SyntaxError: Invalid regular expression:
+/^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-Z]+/: Range out of order in character class
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 266:3        throw_
+dart-sdk/lib/_internal/js_dev_runtime/private/profile.dart 117:39                  makeNative
+dart-sdk/lib/_internal/js_dev_runtime/private/regexp_helper.dart 60:29             new <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/core_patch.dart 524:9                  new
+package:softmed24h/src/screens/forget_password/forget_password_screen.dart 68:100  <fn>
+package:flutter/src/widgets/form.dart 659:33                                       [_validate]
+package:flutter/src/widgets/form.dart 647:7                                        <fn>
+package:flutter/src/widgets/framework.dart 1199:30                                 setState
+package:flutter/src/widgets/form.dart 646:5                                        validate
+package:flutter/src/widgets/form.dart 360:40                                       [_validate]
+package:flutter/src/widgets/form.dart 330:12                                       validate
+package:softmed24h/src/screens/forget_password/forget_password_screen.dart 23:18   <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 622:19                <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 647:23                <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 541:3                 _asyncStartSync
+package:softmed24h/src/screens/forget_password/forget_password_screen.dart 22:8    [_submitForm]
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 117:77   tear
+package:flutter/src/material/ink_well.dart 1203:21                                 handleTap
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 117:77   tear
+package:flutter/src/gestures/recognizer.dart 345:24                                invokeCallback
+package:flutter/src/gestures/tap.dart 737:11                                       handleTapUp
+package:flutter/src/gestures/tap.dart 362:5                                        [_checkUp]
+package:flutter/src/gestures/tap.dart 293:7                                        handlePrimaryPointer
+package:flutter/src/gestures/recognizer.dart 706:9                                 handleEvent
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 117:77   tear
+package:flutter/src/gestures/pointer_router.dart 97:7                              [_dispatch]
+package:flutter/src/gestures/pointer_router.dart 143:9                             <fn>
+dart-sdk/lib/_internal/js_dev_runtime/private/linked_hash_map.dart 21:7            forEach
+package:flutter/src/gestures/pointer_router.dart 141:17                            [_dispatchEventToRoutes]
+package:flutter/src/gestures/pointer_router.dart 131:7                             route
+package:flutter/src/gestures/binding.dart 530:5                                    handleEvent
+package:flutter/src/gestures/binding.dart 499:14                                   dispatchEvent
+package:flutter/src/rendering/binding.dart 473:11                                  dispatchEvent
+package:flutter/src/gestures/binding.dart 437:7
+[_handlePointerEventImmediately]
+package:flutter/src/gestures/binding.dart 394:5                                    handlePointerEvent
+package:flutter/src/gestures/binding.dart 341:7                                    [_flushPointerEventQueue]      
+package:flutter/src/gestures/binding.dart 308:9                                    [_handlePointerDataPacket]     
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 117:77   tear
+lib/_engine/engine/platform_dispatcher.dart 1327:5                                 invoke1
+lib/_engine/engine/platform_dispatcher.dart 281:5                                  invokeOnPointerDataPacket      
+lib/_engine/engine/pointer_binding.dart 411:30                                     [_sendToFramework]
+lib/_engine/engine/pointer_binding.dart 231:7                                      onPointerData
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 117:77   tear
+lib/_engine/engine/pointer_binding.dart 1029:20                                    <fn>
+lib/_engine/engine/pointer_binding.dart 912:7                                      <fn>
+lib/_engine/engine/pointer_binding.dart 535:9                                      loggedHandler
+dart-sdk/lib/async/zone.dart 1849:54                                               runUnary
+dart-sdk/lib/async/zone.dart 1804:26                                               <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 224:27     _callDartFunctionFast1

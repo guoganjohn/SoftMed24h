@@ -14,7 +14,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome to MeuMed!'),
+        toolbarHeight: 0,
+        elevation: 0,
         automaticallyImplyLeading: false, // No back button on home page
       ),
       body: Row(
@@ -39,11 +40,12 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Expanded(
                                 child: const Text(
-                                  'MeuMed Menu',
+                                  'MeuMed',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 24,
                                   ),
+                                  softWrap: false,
                                 ),
                               ),
                               IconButton(
@@ -68,26 +70,35 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.only(
                               right: 8.0,
                             ), // Shift right
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
+                            child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isSidebarExpanded = true;
+                                  });
+                                },
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  _isSidebarExpanded = true;
-                                });
-                              },
                             ),
                           ),
                         ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.home, color: Colors.white),
+                  leading: SizedBox(
+                    width: 24, // Constrain the width of the leading icon
+                    child: const Icon(Icons.home, color: Colors.white),
+                  ),
                   title: _isSidebarExpanded
                       ? const Text(
-                          'Home',
+                          'Início',
                           style: TextStyle(color: Colors.white),
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
                         )
                       : null,
                   onTap: () {
@@ -98,11 +109,16 @@ class _HomePageState extends State<HomePage> {
                   child: SizedBox(),
                 ), // Pushes the logout button to the bottom
                 ListTile(
-                  leading: const Icon(Icons.logout, color: Colors.white),
+                  leading: SizedBox(
+                    width: 24, // Constrain the width of the leading icon
+                    child: const Icon(Icons.logout, color: Colors.white),
+                  ),
                   title: _isSidebarExpanded
                       ? const Text(
-                          'Logout',
+                          'Sair',
                           style: TextStyle(color: Colors.white),
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
                         )
                       : null,
                   onTap: () {
@@ -122,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'You have successfully logged in!',
+                    'Você fez o login com sucesso!',
                     style: TextStyle(fontSize: 24),
                   ),
                   SizedBox(height: 20),

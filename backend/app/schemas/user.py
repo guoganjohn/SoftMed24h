@@ -18,6 +18,14 @@ class UserLogin(BaseModel):
     email: str
     password: str
 
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str = Field(..., max_length=72)
+    confirm_password: str = Field(..., max_length=72)
+
 class User(UserBase):
     id: int
     is_active: bool

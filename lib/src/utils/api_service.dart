@@ -21,6 +21,24 @@ class ApiService {
     }
   }
 
+  Future<void> forgotPassword(String email) async {
+    final url = Uri.parse('$_baseUrl/forgot-password');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({'email': email}),
+    );
+
+    if (response.statusCode == 200) {
+      // Successfully sent reset link request
+      return;
+    } else {
+      throw Exception('Failed to request password reset: ${response.body}');
+    }
+  }
+
   Future<User> register(
       String email,
       String password,
