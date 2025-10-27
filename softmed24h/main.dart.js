@@ -83785,7 +83785,7 @@ A.J7.prototype={
 I(a){var s=null
 return A.cf(s,A.bH(A.b([A.JQ(new A.a2e()),B.kR,A.dc(new A.dG(B.AR,A.cf(s,A.JQ(new A.a2f()),B.u,B.ak,s,s,s,s,s,B.F_,s,s,s),s),s,s)],t.p),B.w,B.p,B.m),B.u,B.ak,s,s,s,s,s,B.n9,s,s,s)}}
 A.a2e.prototype={
-$2(a,b){var s=null,r="images/logo.png",q="QUERO ME CONSULTAR",p=t.p,o=A.cf(s,A.c1(A.b([A.c1(A.b([A.kc(r,s,40),B.d0,B.fC],p),B.w,B.p,B.m),A.c1(A.b([A.tR(B.zL,new A.a2a(a),s),B.d0,A.qw(14,36,B.dt,s,q,new A.a2b(a),260)],p),B.w,B.p,B.m)],p),B.w,B.eM,B.m),B.u,B.a6,s,s,s,s,s,new A.a8(20,10,20,10),s,s,s)
+$2(a,b){var s=null,r="assets/images/logo.png",q="QUERO ME CONSULTAR",p=t.p,o=A.cf(s,A.c1(A.b([A.c1(A.b([A.kc(r,s,40),B.d0,B.fC],p),B.w,B.p,B.m),A.c1(A.b([A.tR(B.zL,new A.a2a(a),s),B.d0,A.qw(14,36,B.dt,s,q,new A.a2b(a),260)],p),B.w,B.p,B.m)],p),B.w,B.eM,B.m),B.u,B.a6,s,s,s,s,s,new A.a8(20,10,20,10),s,s,s)
 if(b.b<600)return A.cf(s,A.bH(A.b([A.c1(A.b([A.kc(r,s,40),B.d0,B.fC],p),B.w,B.bZ,B.m),B.bC,A.c1(A.b([A.tR(B.zL,new A.a2c(a),s),B.d0,A.qw(14,36,B.dt,s,q,new A.a2d(a),260)],p),B.w,B.bZ,B.m)],p),B.w,B.p,B.m),B.u,B.a6,s,s,s,s,s,new A.a8(10,20,10,20),s,s,s)
 else return A.dc(new A.dG(B.AQ,o,s),s,s)},
 $S:200}
@@ -83806,17 +83806,17 @@ $0(){var s=t.X
 A.de(this.a).iJ("/register",s,s)},
 $S:0}
 A.a2f.prototype={
-$2(a,b){var s,r,q,p="Consultas m\xe9dicas",o=null,n="24h por dia!",m="SEM SAIR DE CASA.",l="images/doctor.png",k=b.b,j=k>600&&k<1024
-if(k<600){k=k<400
-s=A.bk(p,o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,k?20:28,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o)
+$2(a,b){var s,r,q,p="Consultas m\xe9dicas",o=null,n="24h por dia!",m="SEM SAIR DE CASA.",l=b.b,k=l>600&&l<1024
+if(l<600){l=l<400
+s=A.bk(p,o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,l?20:28,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o)
 r=A.dr(12)
 q=t.p
-return A.bH(A.b([A.bH(A.b([A.af7(B.cy,A.b([s,B.Pw,A.cf(o,A.bk(n,o,o,o,o,A.c8(o,o,B.ak,o,o,o,o,o,o,o,o,k?20:28,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o),B.u,o,o,new A.c2(B.a6,o,o,r,o,o,B.a9),o,o,o,B.j5,o,o,o)],q),0,0),B.bC,A.bk(m,o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,18,o,o,o,o,o,!0,o,o,o,o,o,o,o,o),o,o),B.ab,B.VQ,B.ab,B.VW,B.bC,A.nU(B.W7,new A.a28(a),A.rb(o,o,B.a6,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o))],q),B.W,B.p,B.m),B.ab,A.kc(l,o,300)],q),B.w,B.p,B.m)}else{k=A.bk(p,o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,j?28:32,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o)
+return A.bH(A.b([A.bH(A.b([A.af7(B.cy,A.b([s,B.Pw,A.cf(o,A.bk(n,o,o,o,o,A.c8(o,o,B.ak,o,o,o,o,o,o,o,o,l?20:28,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o),B.u,o,o,new A.c2(B.a6,o,o,r,o,o,B.a9),o,o,o,B.j5,o,o,o)],q),0,0),B.bC,A.bk(m,o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,18,o,o,o,o,o,!0,o,o,o,o,o,o,o,o),o,o),B.ab,B.VQ,B.ab,B.VW,B.bC,A.nU(B.W7,new A.a28(a),A.rb(o,o,B.a6,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o))],q),B.W,B.p,B.m),B.ab,A.kc("images/doctor.png",o,300)],q),B.w,B.p,B.m)}else{l=A.bk(p,o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,k?28:32,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o)
 s=A.dr(12)
 r=t.p
-s=A.af7(B.cy,A.b([k,A.cf(o,A.bk(n,o,o,o,o,A.c8(o,o,B.ak,o,o,o,o,o,o,o,o,j?28:32,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o),B.u,o,o,new A.c2(B.a6,o,o,s,o,o,B.a9),o,o,o,B.j5,o,o,o)],r),10,14)
-k=A.bk(m,o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,j?20:22,o,o,B.X,o,o,!0,o,o,o,o,o,o,o,o),o,o)
-return A.c1(A.b([new A.rg(3,B.nv,A.bH(A.b([s,B.bC,k,B.ab,B.VG,B.ab,A.bk("R$ 49,90",o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,j?24:28,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o),B.bC,A.nU(B.Vz,new A.a29(a),A.rb(o,o,B.a6,o,o,o,o,o,o,o,o,o,B.Fc,o,new A.cj(A.dr(8),B.o),o,o,o,o,o))],r),B.W,B.p,B.m),o),B.d0,new A.rg(1,B.nv,A.kc(l,B.AV,350),o)],r),B.w,B.eM,B.m)}},
+s=A.af7(B.cy,A.b([l,A.cf(o,A.bk(n,o,o,o,o,A.c8(o,o,B.ak,o,o,o,o,o,o,o,o,k?28:32,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o),B.u,o,o,new A.c2(B.a6,o,o,s,o,o,B.a9),o,o,o,B.j5,o,o,o)],r),10,14)
+l=A.bk(m,o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,k?20:22,o,o,B.X,o,o,!0,o,o,o,o,o,o,o,o),o,o)
+return A.c1(A.b([new A.rg(3,B.nv,A.bH(A.b([s,B.bC,l,B.ab,B.VG,B.ab,A.bk("R$ 49,90",o,o,o,o,A.c8(o,o,B.a6,o,o,o,o,o,o,o,o,k?24:28,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),o,o),B.bC,A.nU(B.Vz,new A.a29(a),A.rb(o,o,B.a6,o,o,o,o,o,o,o,o,o,B.Fc,o,new A.cj(A.dr(8),B.o),o,o,o,o,o))],r),B.W,B.p,B.m),o),B.d0,new A.rg(1,B.nv,A.kc("assets/images/doctor.png",B.AV,350),o)],r),B.w,B.eM,B.m)}},
 $S:201}
 A.a28.prototype={
 $0(){var s=t.X

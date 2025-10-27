@@ -24,7 +24,7 @@ class HeaderSection extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Image.asset('images/logo.png', height: 40),
+                        Image.asset('assets/images/logo.png', height: 40),
                         const SizedBox(width: 10),
                         const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,7 +82,7 @@ class HeaderSection extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center, // Center the logo and text
                         children: [
-                          Image.asset('images/logo.png', height: 40),
+                          Image.asset('assets/images/logo.png', height: 40),
                           const SizedBox(width: 10),
                           const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,7 +360,7 @@ class HeaderSection extends StatelessWidget {
                           Flexible(
                             flex: 1,
                             child: Image.asset(
-                              'images/doctor.png',
+                              'assets/images/doctor.png',
                               height: 350,
                               fit: BoxFit.contain,
                             ),
