@@ -7,11 +7,11 @@ import 'package:softmed24h/src/screens/forget_password/reset_password_screen.dar
 import 'package:softmed24h/src/screens/home/home_page.dart';
 import 'package:softmed24h/src/screens/landing/landing_screen.dart';
 import 'package:softmed24h/src/screens/payment/payment_screen.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:softmed24h/src/screens/forget_password/token_error_screen.dart';
 
 void main() {
-  usePathUrlStrategy();
+  setUrlStrategy(PathUrlStrategy());
   runApp(const MyApp());
 }
 
