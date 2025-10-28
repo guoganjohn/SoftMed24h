@@ -560,16 +560,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
         else
           Row(
             children: [
-              Expanded(
-                child: Text(
-                  'CEP ${_addressData!['cep']} - ${_addressData!['logradouro']}, ${_addressData!['bairro']}, ${_addressData!['localidade']}/${_addressData!['uf']}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-              TextButton(
+                                Expanded(
+                                  child: Text(
+                                    'CEP ${_cepController.text} - ${_addressData!['logradouro']}${_addressData!['numero'] != null && _addressData!['numero'].isNotEmpty ? ', N° ${_addressData!['numero']}' : ''}${_addressData!['complemento'] != null && _addressData!['complemento'].isNotEmpty ? ', ${_addressData!['complemento']}' : ''}, ${_addressData!['bairro']}, ${_addressData!['localidade']}/${_addressData!['uf']}',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),              TextButton(
                 onPressed: () {
                   setState(() {
                     _showManualAddress = true;
+                    _numeroController.text = _addressData!['numero'] ?? '';
+                    _complementoController.text = _addressData!['complemento'] ?? '';
                   });
                 },
                 child: const Text('Mudar'),
