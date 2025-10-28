@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:softmed24h/src/utils/session_manager.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -121,8 +122,8 @@ class _HomePageState extends State<HomePage> {
                           overflow: TextOverflow.ellipsis,
                         )
                       : null,
-                  onTap: () {
-                    // Implement logout logic here
+                  onTap: () async {
+                    await SessionManager().clearToken();
                     Navigator.of(
                       context,
                     ).pushNamedAndRemoveUntil('/login', (route) => false);

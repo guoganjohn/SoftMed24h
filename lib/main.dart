@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:softmed24h/src/screens/auth/login_screen.dart';
 import 'package:softmed24h/src/screens/auth/register_screen.dart';
@@ -9,16 +11,18 @@ import 'package:softmed24h/src/screens/landing/landing_screen.dart';
 import 'package:softmed24h/src/screens/payment/payment_screen.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:softmed24h/src/screens/forget_password/token_error_screen.dart';
+import 'package:softmed24h/src/utils/session_manager.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   setUrlStrategy(PathUrlStrategy());
+  await dotenv.load(fileName: kReleaseMode ? ".env.production" : ".env.development");
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,6 +31,18 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         fontFamily: 'Montserrat',
+      ),
+      home: FutureBuilder<String?>(
+        future: SessionManager().getToken(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SplashScreen();
+          }
+          if (snapshot.hasData && snapshot.data != null) {
+            return const HomePage();
+          }
+          return const LandingPage();
+        },
       ),
       onGenerateRoute: (settings) {
         if (settings.name?.startsWith('/reset-password') == true) {
@@ -59,6 +75,19 @@ class MyApp extends StatelessWidget {
           }
         });
       },
+    );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

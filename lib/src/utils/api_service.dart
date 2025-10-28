@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String _baseUrl =
-      'https://minhaclinica.softmed24h.com'; // Replace with your backend URL
+  final String _baseUrl = dotenv.env['BASE_URL']!;
 
   Future<AuthResponse> login(String email, String password) async {
     final url = Uri.parse('$_baseUrl/token');

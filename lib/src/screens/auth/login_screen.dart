@@ -1,3 +1,4 @@
+import 'package:softmed24h/src/utils/session_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:softmed24h/src/utils/api_service.dart';
 import 'package:softmed24h/src/utils/app_colors.dart';
@@ -292,8 +293,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           _emailController.text,
                           _passwordController.text,
                         );
+                        await SessionManager().saveToken(authResponse.accessToken);
                         _showSnackBar(
-                          'Login realizado com sucesso! Token: ${authResponse.accessToken}',
+                          'Login realizado com sucesso!',
                           Colors.green,
                         );
                         Navigator.of(context).pushReplacementNamed('/home');
