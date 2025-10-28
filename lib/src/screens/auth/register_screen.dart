@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Required for FilteringTextInputFormatter
 import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/services/ibge_service.dart';
 import 'package:softmed24h/src/services/viacep_service.dart';
 import 'package:softmed24h/src/utils/api_service.dart';
-import 'package:flutter/services.dart'; // Required for FilteringTextInputFormatter
 import 'package:softmed24h/src/utils/app_colors.dart';
 import 'package:softmed24h/src/utils/input_formatters.dart';
 import 'package:softmed24h/src/widgets/app_button.dart';
@@ -153,7 +153,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-
   // --- App Bar ---
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
@@ -174,10 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/logo.png',
-                      height: 40,
-                    ),
+                    Image.asset('assets/images/logo.png', height: 40),
                     const SizedBox(width: 10),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +241,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 1. Name
-          _buildFormLabel('Nome', mandatory: true, tooltipMessage: 'Informe o seu nome completo.'),
+          _buildFormLabel(
+            'Nome',
+            mandatory: true,
+            tooltipMessage: 'Informe o seu nome completo.',
+          ),
           _buildTextField(
             controller: _nameController,
             validator: (value) {
@@ -258,7 +258,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 2. E-mail
-          _buildFormLabel('E-mail', mandatory: true, tooltipMessage: 'Informe o seu e-mail, que também servirá como login de acesso à área exclusiva do cliente.'),
+          _buildFormLabel(
+            'E-mail',
+            mandatory: true,
+            tooltipMessage:
+                'Informe o seu e-mail, que também servirá como login de acesso à área exclusiva do cliente.',
+          ),
           _buildTextField(
             keyboardType: TextInputType.emailAddress,
             controller: _emailController,
@@ -281,7 +286,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // CPF Field
-          _buildFormLabel('CPF', mandatory: true, tooltipMessage: 'Informe o seu CPF. Pedimos o seu CPF apenas para evitar cadastros falsos e garantir a segurana dos pagamentos processados em nossa plataforma.'),
+          _buildFormLabel(
+            'CPF',
+            mandatory: true,
+            tooltipMessage:
+                'Informe o seu CPF. Pedimos o seu CPF apenas para evitar cadastros falsos e garantir a segurana dos pagamentos processados em nossa plataforma.',
+          ),
           _buildTextField(
             keyboardType: TextInputType.number,
             controller: _cpfController,
@@ -302,7 +312,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 4. Cell phone
-          _buildFormLabel('Celular', mandatory: true, hint: '', tooltipMessage: 'Informe o seu telefone celular de contato.'),
+          _buildFormLabel(
+            'Celular',
+            mandatory: true,
+            hint: '',
+            tooltipMessage: 'Informe o seu telefone celular de contato.',
+          ),
           _buildTextField(
             keyboardType: TextInputType.phone,
             controller: _phoneController,
@@ -325,7 +340,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 5. Date of birth
-          _buildFormLabel('Data de Nascimento', mandatory: true, tooltipMessage: 'Informe a sua data de nascimento.'),
+          _buildFormLabel(
+            'Data de Nascimento',
+            mandatory: true,
+            tooltipMessage: 'Informe a sua data de nascimento.',
+          ),
           _buildTextField(
             keyboardType: TextInputType.datetime,
             controller: _dobController,
@@ -349,7 +368,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 7. Password
-          _buildFormLabel('Senha', mandatory: true, tooltipMessage: 'Escolha a sua senha de acesso ao nosso portal.'),
+          _buildFormLabel(
+            'Senha',
+            mandatory: true,
+            tooltipMessage: 'Escolha a sua senha de acesso ao nosso portal.',
+          ),
           _buildTextField(
             isPassword: true,
             obscureText: _obscurePassword,
@@ -372,7 +395,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 8. Confirm Password
-          _buildFormLabel('Confirme a senha', mandatory: true, tooltipMessage: 'Repita a sua senha de acesso.'),
+          _buildFormLabel(
+            'Confirme a senha',
+            mandatory: true,
+            tooltipMessage: 'Repita a sua senha de acesso.',
+          ),
           _buildTextField(
             isPassword: true,
             obscureText: _obscureConfirmPassword,
@@ -419,11 +446,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return;
                     }
                     if (_selectedGender == null) {
-                      _showSnackBar('Por favor, selecione seu gênero', Colors.red);
+                      _showSnackBar(
+                        'Por favor, selecione seu gênero',
+                        Colors.red,
+                      );
                       return;
                     }
                     // Password match check is now handled by the validator in _buildTextField
-                  
+
                     final apiService = ApiService();
                     try {
                       // Reformat birthday from DD/MM/YYYY to YYYY-MM-DD
@@ -432,7 +462,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       );
                       final String formattedBirthday =
                           '${dobParts[2]}-${dobParts[1]}-${dobParts[0]}';
-                  
+
                       await apiService.register(
                         _emailController.text,
                         _passwordController.text,
@@ -498,26 +528,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildFormLabel('CEP', mandatory: true, tooltipMessage: 'Informe o CEP do seu endereo.'),
+              _buildFormLabel(
+                'CEP',
+                mandatory: true,
+                tooltipMessage: 'Informe o CEP do seu endereo.',
+              ),
               _buildTextField(
                 controller: _cepController,
                 inputFormatters: [CepInputFormatter()],
                 hintText: '00000-000',
               ),
               const SizedBox(height: 20),
-              _buildFormLabel('Logradouro', mandatory: true, tooltipMessage: 'Informe o nome da rua ou avenida do seu endereo.'),
+              _buildFormLabel(
+                'Logradouro',
+                mandatory: true,
+                tooltipMessage:
+                    'Informe o nome da rua ou avenida do seu endereo.',
+              ),
               _buildTextField(controller: _logradouroController),
               const SizedBox(height: 20),
-              _buildFormLabel('Número', mandatory: true, tooltipMessage: 'Informe o número do imóvel do seu endereo.'),
+              _buildFormLabel(
+                'Número',
+                mandatory: true,
+                tooltipMessage: 'Informe o número do imóvel do seu endereo.',
+              ),
               _buildTextField(controller: _numeroController),
               const SizedBox(height: 20),
-              _buildFormLabel('Complemento', tooltipMessage: 'Informe o complemento do seu endereo, se houver.'),
+              _buildFormLabel(
+                'Complemento',
+                tooltipMessage:
+                    'Informe o complemento do seu endereo, se houver.',
+              ),
               _buildTextField(controller: _complementoController),
               const SizedBox(height: 20),
-              _buildFormLabel('Bairro', mandatory: true, tooltipMessage: 'Informe o bairro do seu endereo.'),
+              _buildFormLabel(
+                'Bairro',
+                mandatory: true,
+                tooltipMessage: 'Informe o bairro do seu endereo.',
+              ),
               _buildTextField(controller: _bairroController),
               const SizedBox(height: 20),
-              _buildFormLabel('Estado', mandatory: true, tooltipMessage: 'Informe o estado do seu endereo.'),
+              _buildFormLabel(
+                'Estado',
+                mandatory: true,
+                tooltipMessage: 'Informe o estado do seu endereo.',
+              ),
               DropdownButtonFormField<String>(
                 value: _selectedState,
                 items: _states.map((String state) {
@@ -539,7 +594,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: const InputDecoration(border: OutlineInputBorder()),
               ),
               const SizedBox(height: 20),
-              _buildFormLabel('Cidade', mandatory: true, tooltipMessage: 'Informe a cidade do seu endereo.'),
+              _buildFormLabel(
+                'Cidade',
+                mandatory: true,
+                tooltipMessage: 'Informe a cidade do seu endereo.',
+              ),
               DropdownButtonFormField<String>(
                 value: _selectedCity,
                 items: _cities.map((String city) {
@@ -558,29 +617,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ],
           )
         else
-          Row(
+          Column(
             children: [
-                                Expanded(
-                                  child: Text(
-                                    'CEP ${_cepController.text} - ${_addressData!['logradouro']}${_addressData!['numero'] != null && _addressData!['numero'].isNotEmpty ? ', N° ${_addressData!['numero']}' : ''}${_addressData!['complemento'] != null && _addressData!['complemento'].isNotEmpty ? ', ${_addressData!['complemento']}' : ''}, ${_addressData!['bairro']}, ${_addressData!['localidade']}/${_addressData!['uf']}',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ),              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _showManualAddress = true;
-                    _numeroController.text = _addressData!['numero'] ?? '';
-                    _complementoController.text = _addressData!['complemento'] ?? '';
-                  });
-                },
-                child: const Text('Mudar'),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'CEP ${_cepController.text} - ${_addressData!['logradouro']}${_addressData!['numero'] != null && _addressData!['numero'].isNotEmpty ? ', N° ${_addressData!['numero']}' : ''}${_addressData!['complemento'] != null && _addressData!['complemento'].isNotEmpty ? ', ${_addressData!['complemento']}' : ''}, ${_addressData!['bairro']}, ${_addressData!['localidade']}/${_addressData!['uf']}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _showManualAddress = true;
+                        _numeroController.text = _addressData!['numero'] ?? '';
+                        _complementoController.text =
+                            _addressData!['complemento'] ?? '';
+                      });
+                    },
+                    child: const Text('Mudar'),
+                  ),
+                ],
               ),
+              const SizedBox(height: 20),
+              _buildFormLabel(
+                'Número',
+                mandatory: true,
+                tooltipMessage: 'Informe o número do imóvel do seu endereo.',
+              ),
+              _buildTextField(controller: _numeroController),
+              const SizedBox(height: 20),
+              _buildFormLabel(
+                'Complemento',
+                tooltipMessage:
+                    'Informe o complemento do seu endereo, se houver.',
+              ),
+              _buildTextField(controller: _complementoController),
             ],
           ),
       ],
     );
   }
-  
+
   void _showSnackBar(String message, Color color) {
     ScaffoldMessenger.of(
       context,
@@ -589,7 +668,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   // --- Field/Layout Helpers ---
 
-  Widget _buildFormLabel(String label, {bool mandatory = false, String? hint, String? tooltipMessage}) {
+  Widget _buildFormLabel(
+    String label, {
+    bool mandatory = false,
+    String? hint,
+    String? tooltipMessage,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
@@ -612,12 +696,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
           const SizedBox(width: 4),
-          if (tooltipMessage != null) // Only show tooltip icon if message is provided
+          if (tooltipMessage !=
+              null) // Only show tooltip icon if message is provided
             GestureDetector(
               onTap: () {
-                _showSnackBar(tooltipMessage, AppColors.primary); // Show tooltip message in a SnackBar
+                _showSnackBar(
+                  tooltipMessage,
+                  AppColors.primary,
+                ); // Show tooltip message in a SnackBar
               },
-              child: Tooltip( // Keep the Tooltip for hover, but also add tap functionality
+              child: Tooltip(
+                // Keep the Tooltip for hover, but also add tap functionality
                 message: tooltipMessage,
                 child: Icon(
                   Icons.help_outline,
@@ -636,7 +725,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildFormLabel('Gênero', mandatory: true, tooltipMessage: 'Informe o seu gênero.'),
+        _buildFormLabel(
+          'Gênero',
+          mandatory: true,
+          tooltipMessage: 'Informe o seu gênero.',
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -887,7 +980,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           suffixIcon: isPassword
               ? IconButton(
                   icon: Icon(
-                    obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    obscureText
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
                     color: AppColors.primary,
                   ),
                   onPressed: onToggleVisibility,
