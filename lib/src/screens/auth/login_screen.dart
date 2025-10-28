@@ -1,8 +1,8 @@
-import 'package:go_router/go_router.dart';
-import 'package:softmed24h/src/utils/session_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/utils/api_service.dart';
 import 'package:softmed24h/src/utils/app_colors.dart';
+import 'package:softmed24h/src/utils/session_manager.dart';
 import 'package:softmed24h/src/widgets/app_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -62,10 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/logo.png',
-                      height: 40,
-                    ),
+                    Image.asset('assets/images/logo.png', height: 40),
                     const SizedBox(width: 10),
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 40,
               fontSize: 18,
               onPressed: () {
-                context.go('/register');
+                context.go('/cadastro');
               },
             ),
           ],
@@ -223,7 +220,10 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 40),
 
             // Email/CPF Field
-            const Text('E-mail ou CPF', style: TextStyle(color: AppColors.text)),
+            const Text(
+              'E-mail ou CPF',
+              style: TextStyle(color: AppColors.text),
+            ),
             const SizedBox(height: 8),
             _buildTextField(
               controller: _emailController,
@@ -292,7 +292,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           _emailController.text,
                           _passwordController.text,
                         );
-                        await SessionManager().saveToken(authResponse.accessToken);
+                        await SessionManager().saveToken(
+                          authResponse.accessToken,
+                        );
                         _showSnackBar(
                           'Login realizado com sucesso!',
                           Colors.green,
@@ -300,7 +302,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         context.go('/home');
                       } catch (e) {
                         _showSnackBar(
-                            'Falha no login: ${e.toString()}', Colors.red);
+                          'Falha no login: ${e.toString()}',
+                          Colors.red,
+                        );
                       }
                     }
                   },
@@ -364,7 +368,9 @@ class _LoginScreenState extends State<LoginScreen> {
           suffixIcon: isPassword
               ? IconButton(
                   icon: Icon(
-                    _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    _obscureText
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
                     color: AppColors.primary,
                   ),
                   onPressed: () {

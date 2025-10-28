@@ -86981,7 +86981,7 @@ while(true)switch(s){case 0:s=3
 return A.Q(new A.BR().w4(),$async$$2)
 case 3:p=d==null
 o=b.c
-n=o==="/login"||o==="/register"||o==="/forgot-password"||o==="/email-sent"||o==="/reset-password"
+n=o==="/login"||o==="/cadastro"||o==="/forgot-password"||o==="/email-sent"||o==="/reset-password"
 if(p&&!n){q="/"
 s=1
 break}if(!p&&n){q="/home"
@@ -87028,7 +87028,7 @@ A.ank.prototype={
 $0(){A.dv(this.a).dP("/",null)},
 $S:0}
 A.anl.prototype={
-$0(){A.dv(this.a).dP("/register",null)},
+$0(){A.dv(this.a).dP("/cadastro",null)},
 $S:0}
 A.anm.prototype={
 $1(a){var s
@@ -87800,7 +87800,7 @@ A.OQ.prototype={
 K(a){var s=null,r=t.w,q=A.bd("200 mil brasileiros atendidos e satisfeitos",s,s,s,s,A.cl(s,s,B.k,s,s,s,s,s,s,s,s,A.bj(a,s,r).w.a.a<600?16:20,s,s,B.a5,s,s,!0,s,s,s,s,s,s,s,s),B.aF,s),p=A.bd("Se consulte agora mesmo: R$ 49,90",s,s,s,s,A.cl(s,s,B.a9,s,s,s,s,s,s,s,s,A.bj(a,s,r).w.a.a<600?14:18,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),B.aF,s),o=A.t4(s,s,B.a9,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s)
 return A.cf(s,A.bz(A.b([q,B.X,p,B.bK,A.oG(A.bd("QUERO ME CONSULTAR",s,s,s,s,A.cl(s,s,B.aj,s,s,s,s,s,s,s,s,A.bj(a,s,r).w.a.a<600?12:14,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),s,s),new A.agx(a),o)],t.p),B.v,B.p,B.m),B.t,B.aj,s,s,s,s,s,B.eA,s,s,1/0)}}
 A.agx.prototype={
-$0(){A.dv(this.a).dP("/register",null)},
+$0(){A.dv(this.a).dP("/cadastro",null)},
 $S:0}
 A.pK.prototype={
 J(){return"PaymentMethod."+this.b}}
@@ -95634,7 +95634,7 @@ s($,"aWf","ayh",()=>new A.G())
 r($,"aNC","auY",()=>{var q=new A.a9u()
 q.LG($.ayh())
 return q})
-s($,"aYA","aI3",()=>{var q=null,p=A.b([A.mn(new A.atS(),"/"),A.mn(new A.atT(),"/login"),A.mn(new A.atU(),"/register"),A.mn(new A.atV(),"/home"),A.mn(new A.atW(),"/payment"),A.mn(new A.atX(),"/forgot-password"),A.mn(new A.atY(),"/email-sent"),A.mn(new A.atZ(),"/reset-password")],t.yo)
+s($,"aYA","aI3",()=>{var q=null,p=A.b([A.mn(new A.atS(),"/"),A.mn(new A.atT(),"/login"),A.mn(new A.atU(),"/cadastro"),A.mn(new A.atV(),"/home"),A.mn(new A.atW(),"/payment"),A.mn(new A.atX(),"/forgot-password"),A.mn(new A.atY(),"/email-sent"),A.mn(new A.atZ(),"/reset-password")],t.yo)
 return A.aKJ(!1,q,q,q,q,q,q,q,q,!1,q,!0,q,!1,new A.QC(new A.adl(p,new A.au_(),5)))})
 s($,"aWE","ayl",()=>new A.G())
 r($,"aOF","ayk",()=>{var q=new A.a9v()

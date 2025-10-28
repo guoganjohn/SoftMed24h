@@ -26,7 +26,7 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
-      path: '/register',
+      path: '/cadastro',
       builder: (BuildContext context, GoRouterState state) {
         return const RegisterScreen();
       },
@@ -68,7 +68,12 @@ final GoRouter appRouter = GoRouter(
   ],
   redirect: (BuildContext context, GoRouterState state) async {
     final bool loggedIn = await SessionManager().getToken() != null;
-    final bool loggingIn = state.matchedLocation == '/login' || state.matchedLocation == '/register' || state.matchedLocation == '/forgot-password' || state.matchedLocation == '/email-sent' || state.matchedLocation == '/reset-password';
+    final bool loggingIn =
+        state.matchedLocation == '/login' ||
+        state.matchedLocation == '/cadastro' ||
+        state.matchedLocation == '/forgot-password' ||
+        state.matchedLocation == '/email-sent' ||
+        state.matchedLocation == '/reset-password';
 
     // If the user is not logged in, and not on the login/register page, redirect to login
     if (!loggedIn && !loggingIn) {

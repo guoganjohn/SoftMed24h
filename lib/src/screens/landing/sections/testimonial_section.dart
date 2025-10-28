@@ -34,7 +34,7 @@ class TestimonialSection extends StatelessWidget {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              context.go('/register');
+              context.go('/cadastro');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.secondary,

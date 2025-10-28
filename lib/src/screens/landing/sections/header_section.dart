@@ -40,7 +40,10 @@ class HeaderSection extends StatelessWidget {
                             ),
                             Text(
                               'Nosso plano é a sua saúde',
-                              style: TextStyle(color: AppColors.text, fontSize: 12),
+                              style: TextStyle(
+                                color: AppColors.text,
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
@@ -81,7 +84,8 @@ class HeaderSection extends StatelessWidget {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center, // Center the logo and text
+                        mainAxisAlignment: MainAxisAlignment
+                            .center, // Center the logo and text
                         children: [
                           Image.asset('assets/images/logo.png', height: 40),
                           const SizedBox(width: 10),
@@ -98,7 +102,10 @@ class HeaderSection extends StatelessWidget {
                               ),
                               Text(
                                 'Nosso plano é a sua saúde',
-                                style: TextStyle(color: AppColors.text, fontSize: 12),
+                                style: TextStyle(
+                                  color: AppColors.text,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
