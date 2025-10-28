@@ -84073,7 +84073,7 @@ A.qu.prototype={
 zu(a,b){return this.alr(a,b)},
 alr(a,b){var s=0,r=A.P(t.W8),q,p,o,n,m
 var $async$zu=A.L(function(c,d){if(c===1)return A.M(d,r)
-while(true)switch(s){case 0:p=A.dO("http://192.168.12.49:8000/token",0,null)
+while(true)switch(s){case 0:p=A.dO("https://minhaclinica.softmed24h.com//token",0,null)
 o=t.N
 n=A.ai(["Content-Type","application/x-www-form-urlencoded"],o,o)
 s=3
@@ -84090,7 +84090,7 @@ return A.O($async$zu,r)},
 yV(a){return this.aje(a)},
 aje(a){var s=0,r=A.P(t.H),q,p,o,n,m
 var $async$yV=A.L(function(b,c){if(b===1)return A.M(c,r)
-while(true)switch(s){case 0:p=A.dO("http://192.168.12.49:8000/forgot-password",0,null)
+while(true)switch(s){case 0:p=A.dO("https://minhaclinica.softmed24h.com//forgot-password",0,null)
 o=t.N
 n=A.ai(["Content-Type","application/json"],o,o)
 s=3
@@ -84103,7 +84103,7 @@ return A.O($async$yV,r)},
 Al(a,b,c){return this.anB(a,b,c)},
 anB(a,b,c){var s=0,r=A.P(t.H),q,p,o,n,m
 var $async$Al=A.L(function(d,e){if(d===1)return A.M(e,r)
-while(true)switch(s){case 0:p=A.dO("http://192.168.12.49:8000/reset-password",0,null)
+while(true)switch(s){case 0:p=A.dO("https://minhaclinica.softmed24h.com//reset-password",0,null)
 o=t.N
 n=A.ai(["Content-Type","application/json"],o,o)
 s=3
@@ -84116,7 +84116,7 @@ return A.O($async$Al,r)},
 Ad(a,b,c,d,e,f,g,h){return this.ani(a,b,c,d,e,f,g,h)},
 ani(a,b,c,d,e,f,g,h){var s=0,r=A.P(t.ui),q,p,o,n,m
 var $async$Ad=A.L(function(i,j){if(i===1)return A.M(j,r)
-while(true)switch(s){case 0:p=A.dO("http://192.168.12.49:8000/users/",0,null)
+while(true)switch(s){case 0:p=A.dO("https://minhaclinica.softmed24h.com//users/",0,null)
 o=t.N
 n=A.ai(["Content-Type","application/json"],o,o)
 s=3
