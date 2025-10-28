@@ -67,7 +67,7 @@ class HeaderSection extends StatelessWidget {
                           height: 36,
                           fontSize: 14,
                           onPressed: () {
-                            context.go('/register');
+                            context.go('/cadastro');
                           },
                         ),
                       ],

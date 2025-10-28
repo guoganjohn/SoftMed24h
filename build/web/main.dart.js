@@ -87689,7 +87689,7 @@ A.a4w.prototype={
 $0(){A.dv(this.a).dP("/login",null)},
 $S:0}
 A.a4x.prototype={
-$0(){A.dv(this.a).dP("/register",null)},
+$0(){A.dv(this.a).dP("/cadastro",null)},
 $S:0}
 A.a4y.prototype={
 $0(){A.dv(this.a).dP("/login",null)},
