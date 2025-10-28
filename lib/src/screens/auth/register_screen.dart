@@ -562,7 +562,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               Expanded(
                 child: Text(
-                  '${_addressData!['logradouro']}, ${_addressData!['localidade']} - ${_addressData!['uf']}',
+                  'CEP ${_addressData!['cep']} - ${_addressData!['logradouro']}, ${_addressData!['localidade']}/${_addressData!['uf']}',
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
