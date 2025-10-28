@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   final String _baseUrl =
-      'https://minhaclinica.softmed24h.com/'; // Replace with your backend URL
+      'https://minhaclinica.softmed24h.com'; // Replace with your backend URL
 
   Future<AuthResponse> login(String email, String password) async {
     final url = Uri.parse('$_baseUrl/token');
