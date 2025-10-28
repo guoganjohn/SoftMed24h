@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:softmed24h/src/services/ibge_service.dart';
+import 'package:softmed24h/src/services/viacep_service.dart';
 import 'package:softmed24h/src/utils/api_service.dart';
 import 'package:flutter/services.dart'; // Required for FilteringTextInputFormatter
 import 'package:softmed24h/src/utils/app_colors.dart';
@@ -23,12 +25,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
+  final TextEditingController _logradouroController = TextEditingController();
+  final TextEditingController _numeroController = TextEditingController();
+  final TextEditingController _complementoController = TextEditingController();
+  final TextEditingController _bairroController = TextEditingController();
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
   bool _acceptTerms = false; // State for terms and conditions checkbox
   String? _selectedGender; // State for selected gender
+
+  Map<String, dynamic>? _addressData;
+  bool _isCepFilled = false;
+  bool _showManualAddress = false;
+  List<String> _states = [];
+  List<String> _cities = [];
+  String? _selectedState;
+  String? _selectedCity;
+
+  final ViaCepService _viaCepService = ViaCepService();
+  final IbgeService _ibgeService = IbgeService();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchStates();
+    _cepController.addListener(() {
+      if (_cepController.text.length == 9) {
+        _fetchAddressFromCep();
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -40,7 +68,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _dobController.dispose();
     _cpfController.dispose();
     _cepController.dispose();
+    _logradouroController.dispose();
+    _numeroController.dispose();
+    _complementoController.dispose();
+    _bairroController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchStates() async {
+    try {
+      final states = await _ibgeService.fetchStates();
+      setState(() {
+        _states = states;
+      });
+    } catch (e) {
+      _showSnackBar('Failed to load states', Colors.red);
+    }
+  }
+
+  Future<void> _fetchCities(String state) async {
+    try {
+      final cities = await _ibgeService.fetchCities(state);
+      setState(() {
+        _cities = cities;
+      });
+    } catch (e) {
+      _showSnackBar('Failed to load cities', Colors.red);
+    }
+  }
+
+  Future<void> _fetchAddressFromCep() async {
+    try {
+      final address = await _viaCepService.fetchAddress(_cepController.text);
+      setState(() {
+        _addressData = address;
+        _logradouroController.text = address['logradouro'] ?? '';
+        _bairroController.text = address['bairro'] ?? '';
+        _selectedState = address['uf'] ?? '';
+        _fetchCities(_selectedState!).then((_) {
+          setState(() {
+            _selectedCity = address['localidade'] ?? '';
+          });
+        });
+        _isCepFilled = true;
+      });
+    } catch (e) {
+      _showSnackBar('Failed to load address from CEP', Colors.red);
+    }
   }
 
   @override
@@ -271,26 +345,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           const SizedBox(height: 20),
 
-          // 6. Address Header and Input (Replicating Image Layout)
-          _buildAddressHeader(),
-          _buildAddressField(
-            'CEP:',
-            '',
-            hasChangeButton: false,
-            controller: _cepController,
-            inputFormatters: [CepInputFormatter()], // Apply CEP mask
-            hintText: '00000-000', // Placeholder for CEP
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Por favor, insira seu CEP';
-              }
-              // Masked CEP length: XXXXX-XXX is 9 characters
-              if (value.length != 9) {
-                return 'O CEP deve ter 9 caracteres';
-              }
-              return null;
-            },
-          ),
+          // 6. Address Section
+          _buildAddressSection(),
           const SizedBox(height: 20),
 
           // 7. Password
@@ -406,6 +462,116 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildAddressSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildAddressHeader(),
+        if (!_isCepFilled)
+          _buildAddressField(
+            'CEP:',
+            '',
+            hasChangeButton: false,
+            controller: _cepController,
+            inputFormatters: [CepInputFormatter()], // Apply CEP mask
+            hintText: '00000-000', // Placeholder for CEP
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Por favor, insira seu CEP';
+              }
+              // Masked CEP length: XXXXX-XXX is 9 characters
+              if (value.length != 9) {
+                return 'O CEP deve ter 9 caracteres';
+              }
+              return null;
+            },
+          )
+        else if (_showManualAddress)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildFormLabel('CEP', mandatory: true),
+              _buildTextField(
+                controller: _cepController,
+                inputFormatters: [CepInputFormatter()],
+                hintText: '00000-000',
+              ),
+              const SizedBox(height: 20),
+              _buildFormLabel('Logradouro', mandatory: true),
+              _buildTextField(controller: _logradouroController),
+              const SizedBox(height: 20),
+              _buildFormLabel('Número', mandatory: true),
+              _buildTextField(controller: _numeroController),
+              const SizedBox(height: 20),
+              _buildFormLabel('Complemento'),
+              _buildTextField(controller: _complementoController),
+              const SizedBox(height: 20),
+              _buildFormLabel('Bairro', mandatory: true),
+              _buildTextField(controller: _bairroController),
+              const SizedBox(height: 20),
+              _buildFormLabel('Estado', mandatory: true),
+              DropdownButtonFormField<String>(
+                value: _selectedState,
+                items: _states.map((String state) {
+                  return DropdownMenuItem<String>(
+                    value: state,
+                    child: Text(state),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedState = newValue;
+                    _selectedCity = null;
+                    _cities = [];
+                    if (newValue != null) {
+                      _fetchCities(newValue);
+                    }
+                  });
+                },
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+              ),
+              const SizedBox(height: 20),
+              _buildFormLabel('Cidade', mandatory: true),
+              DropdownButtonFormField<String>(
+                value: _selectedCity,
+                items: _cities.map((String city) {
+                  return DropdownMenuItem<String>(
+                    value: city,
+                    child: Text(city),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedCity = newValue;
+                  });
+                },
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+              ),
+            ],
+          )
+        else
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  '${_addressData!['logradouro']}, ${_addressData!['localidade']} - ${_addressData!['uf']}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _showManualAddress = true;
+                  });
+                },
+                child: const Text('Mudar'),
+              ),
+            ],
+          ),
+      ],
     );
   }
   
