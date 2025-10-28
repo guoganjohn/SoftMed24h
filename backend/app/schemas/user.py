@@ -10,6 +10,12 @@ class UserBase(BaseModel):
     phone: Optional[str] = None
     birthday: Optional[date] = None
     cep: Optional[str] = None
+    logradouro: Optional[str] = None
+    numero: Optional[str] = None
+    complemento: Optional[str] = None
+    bairro: Optional[str] = None
+    estado: Optional[str] = None
+    cidade: Optional[str] = None
 
 class UserCreate(UserBase):
     password: str = Field(..., max_length=72)
@@ -29,6 +35,12 @@ class ResetPasswordRequest(BaseModel):
 class User(UserBase):
     id: int
     is_active: bool
+    logradouro: Optional[str] = None
+    numero: Optional[str] = None
+    complemento: Optional[str] = None
+    bairro: Optional[str] = None
+    estado: Optional[str] = None
+    cidade: Optional[str] = None
     medical_records: List["MedicalRecord"] = []
     prescriptions: List["Prescription"] = []
 

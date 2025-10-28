@@ -44,6 +44,12 @@ def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
         phone=user.phone,
         birthday=user.birthday,
         cep=user.cep,
+        logradouro=user.logradouro,
+        numero=user.numero,
+        complemento=user.complemento,
+        bairro=user.bairro,
+        estado=user.estado,
+        cidade=user.cidade,
     )
     db.add(db_user)
     db.commit()

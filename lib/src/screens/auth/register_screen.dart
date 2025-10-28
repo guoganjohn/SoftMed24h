@@ -246,7 +246,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 1. Name
-          _buildFormLabel('Nome', mandatory: true),
+          _buildFormLabel('Nome', mandatory: true, tooltipMessage: 'Informe o seu nome completo.'),
           _buildTextField(
             controller: _nameController,
             validator: (value) {
@@ -259,7 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 2. E-mail
-          _buildFormLabel('E-mail', mandatory: true),
+          _buildFormLabel('E-mail', mandatory: true, tooltipMessage: 'Informe o seu e-mail, que também servirá como login de acesso à área exclusiva do cliente.'),
           _buildTextField(
             keyboardType: TextInputType.emailAddress,
             controller: _emailController,
@@ -282,7 +282,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // CPF Field
-          _buildFormLabel('CPF', mandatory: true),
+          _buildFormLabel('CPF', mandatory: true, tooltipMessage: 'Informe o seu CPF. Pedimos o seu CPF apenas para evitar cadastros falsos e garantir a segurana dos pagamentos processados em nossa plataforma.'),
           _buildTextField(
             keyboardType: TextInputType.number,
             controller: _cpfController,
@@ -303,7 +303,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 4. Cell phone
-          _buildFormLabel('Celular', mandatory: true, hint: ''),
+          _buildFormLabel('Celular', mandatory: true, hint: '', tooltipMessage: 'Informe o seu telefone celular de contato.'),
           _buildTextField(
             keyboardType: TextInputType.phone,
             controller: _phoneController,
@@ -326,7 +326,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 5. Date of birth
-          _buildFormLabel('Data de Nascimento', mandatory: true),
+          _buildFormLabel('Data de Nascimento', mandatory: true, tooltipMessage: 'Informe a sua data de nascimento.'),
           _buildTextField(
             keyboardType: TextInputType.datetime,
             controller: _dobController,
@@ -350,7 +350,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 7. Password
-          _buildFormLabel('Senha', mandatory: true),
+          _buildFormLabel('Senha', mandatory: true, tooltipMessage: 'Escolha a sua senha de acesso ao nosso portal.'),
           _buildTextField(
             isPassword: true,
             obscureText: _obscurePassword,
@@ -373,7 +373,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SizedBox(height: 20),
 
           // 8. Confirm Password
-          _buildFormLabel('Confirme a senha', mandatory: true),
+          _buildFormLabel('Confirme a senha', mandatory: true, tooltipMessage: 'Repita a sua senha de acesso.'),
           _buildTextField(
             isPassword: true,
             obscureText: _obscureConfirmPassword,
@@ -443,6 +443,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _phoneController.text,
                         formattedBirthday,
                         _cepController.text,
+                        _logradouroController.text,
+                        _numeroController.text,
+                        _complementoController.text,
+                        _bairroController.text,
+                        _selectedState!,
+                        _selectedCity!,
                       );
                       _showSnackBar(
                         'Cadastro realizado com sucesso! Por favor, faça o pagamento.',
@@ -493,26 +499,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildFormLabel('CEP', mandatory: true),
+              _buildFormLabel('CEP', mandatory: true, tooltipMessage: 'Informe o CEP do seu endereo.'),
               _buildTextField(
                 controller: _cepController,
                 inputFormatters: [CepInputFormatter()],
                 hintText: '00000-000',
               ),
               const SizedBox(height: 20),
-              _buildFormLabel('Logradouro', mandatory: true),
+              _buildFormLabel('Logradouro', mandatory: true, tooltipMessage: 'Informe o nome da rua ou avenida do seu endereo.'),
               _buildTextField(controller: _logradouroController),
               const SizedBox(height: 20),
-              _buildFormLabel('Número', mandatory: true),
+              _buildFormLabel('Número', mandatory: true, tooltipMessage: 'Informe o número do imóvel do seu endereo.'),
               _buildTextField(controller: _numeroController),
               const SizedBox(height: 20),
-              _buildFormLabel('Complemento'),
+              _buildFormLabel('Complemento', tooltipMessage: 'Informe o complemento do seu endereo, se houver.'),
               _buildTextField(controller: _complementoController),
               const SizedBox(height: 20),
-              _buildFormLabel('Bairro', mandatory: true),
+              _buildFormLabel('Bairro', mandatory: true, tooltipMessage: 'Informe o bairro do seu endereo.'),
               _buildTextField(controller: _bairroController),
               const SizedBox(height: 20),
-              _buildFormLabel('Estado', mandatory: true),
+              _buildFormLabel('Estado', mandatory: true, tooltipMessage: 'Informe o estado do seu endereo.'),
               DropdownButtonFormField<String>(
                 value: _selectedState,
                 items: _states.map((String state) {
@@ -534,7 +540,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: const InputDecoration(border: OutlineInputBorder()),
               ),
               const SizedBox(height: 20),
-              _buildFormLabel('Cidade', mandatory: true),
+              _buildFormLabel('Cidade', mandatory: true, tooltipMessage: 'Informe a cidade do seu endereo.'),
               DropdownButtonFormField<String>(
                 value: _selectedCity,
                 items: _cities.map((String city) {
@@ -583,7 +589,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   // --- Field/Layout Helpers ---
 
-  Widget _buildFormLabel(String label, {bool mandatory = false, String? hint}) {
+  Widget _buildFormLabel(String label, {bool mandatory = false, String? hint, String? tooltipMessage}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
@@ -606,12 +612,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
           const SizedBox(width: 4),
-          // Question mark icon placeholder
-          Icon(
-            Icons.help_outline,
-            size: 14,
-            color: AppColors.text.withOpacity(0.6),
-          ),
+          if (tooltipMessage != null) // Only show tooltip icon if message is provided
+            Tooltip(
+              message: tooltipMessage,
+              child: Icon(
+                Icons.help_outline,
+                size: 14,
+                color: AppColors.text.withOpacity(0.6),
+              ),
+            ),
         ],
       ),
     );
@@ -622,7 +631,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildFormLabel('Gênero', mandatory: true),
+        _buildFormLabel('Gênero', mandatory: true, tooltipMessage: 'Informe o seu gênero.'),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

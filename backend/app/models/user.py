@@ -18,6 +18,12 @@ class User(Base):
     phone = Column(String)
     birthday = Column(Date)
     cep = Column(String)
+    logradouro = Column(String)
+    numero = Column(String)
+    complemento = Column(String, nullable=True)
+    bairro = Column(String)
+    estado = Column(String)
+    cidade = Column(String)
 
     # Password reset fields
     password_reset_token = Column(String, nullable=True)

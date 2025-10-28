@@ -70,6 +70,12 @@ class ApiService {
       String phone,
       String birthday,
       String cep,
+      String logradouro,
+      String numero,
+      String? complemento,
+      String bairro,
+      String estado,
+      String cidade,
       ) async {
     final url = Uri.parse('$_baseUrl/users/');
     final response = await http.post(
@@ -86,6 +92,12 @@ class ApiService {
         'phone': phone,
         'birthday': birthday,
         'cep': cep,
+        'logradouro': logradouro,
+        'numero': numero,
+        'complemento': complemento,
+        'bairro': bairro,
+        'estado': estado,
+        'cidade': cidade,
       }),
     );
 
@@ -115,14 +127,54 @@ class User {
   final int id;
   final String email;
   final bool isActive;
+  final String? name;
+  final String? gender;
+  final String? cpf;
+  final String? phone;
+  final String? birthday;
+  final String? cep;
+  final String? logradouro;
+  final String? numero;
+  final String? complemento;
+  final String? bairro;
+  final String? estado;
+  final String? cidade;
 
-  User({required this.id, required this.email, required this.isActive});
+  User({
+    required this.id,
+    required this.email,
+    required this.isActive,
+    this.name,
+    this.gender,
+    this.cpf,
+    this.phone,
+    this.birthday,
+    this.cep,
+    this.logradouro,
+    this.numero,
+    this.complemento,
+    this.bairro,
+    this.estado,
+    this.cidade,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
       email: json['email'],
       isActive: json['is_active'],
+      name: json['name'],
+      gender: json['gender'],
+      cpf: json['cpf'],
+      phone: json['phone'],
+      birthday: json['birthday'],
+      cep: json['cep'],
+      logradouro: json['logradouro'],
+      numero: json['numero'],
+      complemento: json['complemento'],
+      bairro: json['bairro'],
+      estado: json['estado'],
+      cidade: json['cidade'],
     );
   }
 }
