@@ -11,6 +11,7 @@ import 'package:softmed24h/src/screens/landing/landing_screen.dart';
 import 'package:softmed24h/src/screens/payment/payment_screen.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:softmed24h/src/screens/forget_password/token_error_screen.dart';
+import 'package:softmed24h/src/utils/redirect_if_authenticated.dart';
 import 'package:softmed24h/src/utils/session_manager.dart';
 
 Future<void> main() async {
@@ -59,9 +60,9 @@ class MyApp extends StatelessWidget {
             case '/':
               return const LandingPage();
             case '/login':
-              return const LoginScreen();
+              return const RedirectIfAuthenticated(child: LoginScreen());
             case '/register':
-              return const RegisterScreen();
+              return const RedirectIfAuthenticated(child: RegisterScreen());
             case '/home':
               return const HomePage();
             case '/payment':
