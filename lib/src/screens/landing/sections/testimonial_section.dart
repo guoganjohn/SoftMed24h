@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/utils/app_colors.dart';
 
 class TestimonialSection extends StatelessWidget {
@@ -33,7 +34,7 @@ class TestimonialSection extends StatelessWidget {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/register');
+              context.go('/register');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.secondary,

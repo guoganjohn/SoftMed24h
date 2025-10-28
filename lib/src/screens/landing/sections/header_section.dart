@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/utils/app_colors.dart';
 import 'package:softmed24h/src/widgets/app_button.dart';
 
@@ -49,7 +50,7 @@ class HeaderSection extends StatelessWidget {
                       children: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pushReplacementNamed('/login');
+                            context.go('/login');
                           },
                           child: const Text(
                             'ENTRAR',
@@ -63,7 +64,7 @@ class HeaderSection extends StatelessWidget {
                           height: 36,
                           fontSize: 14,
                           onPressed: () {
-                            Navigator.of(context).pushReplacementNamed('/register');
+                            context.go('/register');
                           },
                         ),
                       ],
@@ -109,7 +110,7 @@ class HeaderSection extends StatelessWidget {
                         children: [
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pushReplacementNamed('/login');
+                              context.go('/login');
                             },
                             child: const Text(
                               'ENTRAR',
@@ -123,7 +124,7 @@ class HeaderSection extends StatelessWidget {
                             height: 36,
                             fontSize: 14,
                             onPressed: () {
-                              Navigator.of(context).pushReplacementNamed('/register');
+                              context.go('/register');
                             },
                           ),
                         ],
@@ -233,7 +234,7 @@ class HeaderSection extends StatelessWidget {
                               const SizedBox(height: 10),
                               ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context).pushReplacementNamed('/register');
+                                  context.go('/register');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.secondary,
@@ -327,9 +328,7 @@ class HeaderSection extends StatelessWidget {
                                 const SizedBox(height: 10),
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.of(
-                                      context,
-                                    ).pushReplacementNamed('/register');
+                                    context.go('/register');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.secondary,

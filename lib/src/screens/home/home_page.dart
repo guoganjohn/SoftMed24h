@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/utils/session_manager.dart';
 
 class HomePage extends StatefulWidget {
@@ -124,9 +125,7 @@ class _HomePageState extends State<HomePage> {
                       : null,
                   onTap: () async {
                     await SessionManager().clearToken();
-                    Navigator.of(
-                      context,
-                    ).pushNamedAndRemoveUntil('/login', (route) => false);
+                    context.go('/login');
                   },
                 ),
               ],

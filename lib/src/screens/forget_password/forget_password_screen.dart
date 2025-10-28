@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/utils/api_service.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         setState(() {
           _isLoading = false;
         });
-        Navigator.of(context).pushNamed('/email-sent');
+        context.go('/email-sent');
       } catch (e) {
         setState(() {
           _isLoading = false;

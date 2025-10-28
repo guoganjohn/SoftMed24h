@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/utils/api_service.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -40,8 +41,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           _confirmPasswordController.text,
         );
         _showSnackBar('Senha redefinida com sucesso! Por favor, faça login.', Colors.green);
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/login', (route) => false);
+        context.go('/login');
       } catch (e) {
         setState(() {
           _errorMessage = e.toString();

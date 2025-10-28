@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/utils/app_colors.dart';
 import 'package:softmed24h/src/widgets/app_button.dart';
 
@@ -83,8 +84,7 @@ class _PaymentScreenState extends State<PaymentScreen>
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/home', (route) => false);
+                context.go('/home');
               },
               child: const Text(
                 'Minha Conta',
@@ -104,7 +104,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               icon: Icons.logout,
               iconSize: 20,
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/login');
+                context.go('/login');
               },
             ),
           ],

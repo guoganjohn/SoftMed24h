@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/services/ibge_service.dart';
 import 'package:softmed24h/src/services/viacep_service.dart';
 import 'package:softmed24h/src/utils/api_service.dart';
@@ -169,9 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).pushNamedAndRemoveUntil('/', (route) => false);
+                  context.go('/');
                 },
                 child: Row(
                   children: [
@@ -208,7 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               height: 40,
               fontSize: 18,
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/login');
+                context.go('/login');
               },
             ),
           ],
@@ -454,7 +453,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         'Cadastro realizado com sucesso! Por favor, faça o pagamento.',
                         Colors.green,
                       );
-                      Navigator.of(context).pushReplacementNamed('/payment');
+                      context.go('/payment');
                     } catch (e) {
                       _showSnackBar(
                         'Falha no cadastro: ${e.toString()}',
@@ -613,12 +612,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           const SizedBox(width: 4),
           if (tooltipMessage != null) // Only show tooltip icon if message is provided
-            Tooltip(
-              message: tooltipMessage,
-              child: Icon(
-                Icons.help_outline,
-                size: 14,
-                color: AppColors.text.withOpacity(0.6),
+            GestureDetector(
+              onTap: () {
+                _showSnackBar(tooltipMessage, AppColors.primary); // Show tooltip message in a SnackBar
+              },
+              child: Tooltip( // Keep the Tooltip for hover, but also add tap functionality
+                message: tooltipMessage,
+                child: Icon(
+                  Icons.help_outline,
+                  size: 14,
+                  color: AppColors.text.withOpacity(0.6),
+                ),
               ),
             ),
         ],

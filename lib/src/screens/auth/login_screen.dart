@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:softmed24h/src/utils/session_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:softmed24h/src/utils/api_service.dart';
@@ -57,9 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).pushNamedAndRemoveUntil('/', (route) => false);
+                  context.go('/');
                 },
                 child: Row(
                   children: [
@@ -96,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 40,
               fontSize: 18,
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/register');
+                context.go('/register');
               },
             ),
           ],
@@ -264,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/forgot-password');
+                  context.go('/forgot-password');
                 },
                 child: const Text(
                   'Esqueceu a senha?',
@@ -298,7 +297,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Login realizado com sucesso!',
                           Colors.green,
                         );
-                        Navigator.of(context).pushReplacementNamed('/home');
+                        context.go('/home');
                       } catch (e) {
                         _showSnackBar(
                             'Falha no login: ${e.toString()}', Colors.red);
