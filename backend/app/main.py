@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import appointments, auth, queue, medical_records, prescriptions, reports, payments, users
@@ -38,9 +39,9 @@ load_dotenv()
 
 # --- Configuration ---
 # You would use a database/cache in a real application to store state/tokens
-STATE_STORE = {} 
+STATE_STORE = {}
 SCOPES = [
-    'https://www.googleapis.com/auth/meetings.space.created',
+    'https://www.googleapis.com/auth/calendar',
     'openid', # Always good practice to include for basic ID
 ]
 
@@ -86,10 +87,10 @@ def google_login_init():
         access_type='offline',
         prompt='consent'
     )
-    
-    # In a real app, 'state' would be stored in a secure cookie or database 
+
+    # In a real app, 'state' would be stored in a secure cookie or database
     # and tied to the user's session ID for CSRF protection.
-    STATE_STORE[state] = True 
+    STATE_STORE[state] = True
     print(f"Stored state: {state}")
 
     return RedirectResponse(authorization_url)
@@ -107,12 +108,12 @@ async def google_auth_callback(request: Request):
         scopes=SCOPES,
         redirect_uri=REDIRECT_URI
     )
-    
+
     # 1. State Validation (Security Check)
     state = request.query_params.get("state")
     if not state or state not in STATE_STORE:
         raise HTTPException(status_code=400, detail="Invalid or missing state parameter. CSRF attempt detected.")
-    
+
     # Remove state after use
     del STATE_STORE[state]
 
@@ -120,21 +121,21 @@ async def google_auth_callback(request: Request):
         # 2. Exchange the authorization code for tokens (Server-to-Server request)
         authorization_response = str(request.url)
         flow.fetch_token(authorization_response=authorization_response)
-        
+
         credentials = flow.credentials
-        
+
         # --- TOKEN STORAGE AND USAGE ---
         # **This is where you get your tokens.**
-        
+
         # Access Token (GOOGLE_OAUTH_TOKEN) - Use for API calls
-        access_token = credentials.token 
-        
+        access_token = credentials.token
+
         # Refresh Token - Store securely and use for subsequent token refreshes
         refresh_token = credentials.refresh_token
-        
+
         # Save both tokens securely associated with the user in your database
         # For demonstration, we'll just print and show them:
-        
+
         return {
             "message": "Authentication Successful!",
             "access_token": access_token,
