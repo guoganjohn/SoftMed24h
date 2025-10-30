@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import appointments, auth, queue, medical_records, prescriptions, reports, payments, users
+from app.routers import appointments, auth, queue, medical_records, prescriptions, reports, payments, users, transactions
 from app.database import engine
 from app.models import user, appointment, medical_record, prescription
 from fastapi.responses import RedirectResponse, HTMLResponse
@@ -33,6 +33,7 @@ app.include_router(prescriptions.router)
 app.include_router(reports.router)
 app.include_router(payments.router)
 app.include_router(users.router)
+app.include_router(transactions.router)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -61,10 +62,10 @@ def home():
     """Simple home page to start the OAuth flow."""
     return HTMLResponse(
         """
-        <h1>Google Meet API Authentication Example</h1>
-        <p>Click the button below to authorize access to your Google Account.</p>
-        <a href="/login/google">
-            <button>Login with Google</button>
+        <h1>Welcome to SoftMed24h Backend</h1>
+        <p>Click the button below to see API documentation.</p>
+        <a href="/docs">
+            <button>Documentation</button>
         </a>
         """
     )
