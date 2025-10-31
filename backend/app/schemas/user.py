@@ -47,6 +47,11 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
+class UserBaseInfo(BaseModel):
+    id: int
+    email: str
+    name: Optional[str] = None
+
 # Import after User is defined to avoid circular import
 from app.schemas.medical_record import MedicalRecord
 from app.schemas.prescription import Prescription

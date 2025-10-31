@@ -35,3 +35,18 @@ def get_queue(queue_service: QueueService = Depends()):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve queue: {e}"
         )
+
+@router.post("/queue/call_next/{doctor_id}", status_code=status.HTTP_200_OK)
+def call_next_patient(doctor_id: int, queue_service: QueueService = Depends()):
+    try:
+        # The call_next_patient method in QueueService handles updating DB and Redis, creating Appointment, and generating meet link.
+        result = queue_service.call_next_patient(doctor_id=doctor_id)
+        return result
+    except HTTPException as e:
+        # Re-raise HTTPException to preserve status code and detail
+        raise e
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to call next patient: {e}"
+        )

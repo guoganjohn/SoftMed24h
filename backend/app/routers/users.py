@@ -1,9 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
-from app.models import user as user_model
+from app.models.user import User as UserModel # Explicitly import and alias User as UserModel
 from app.schemas import user as user_schema
 from passlib.context import CryptContext
+from app.routers.auth import oauth2_scheme, SECRET_KEY, ALGORITHM # Import oauth2_scheme, SECRET_KEY, ALGORITHM
+from jose import JWTError, jwt # Import jwt and JWTError
 
 router = APIRouter()
 
@@ -27,15 +29,41 @@ def get_db():
         db.close()
 
 def get_user_by_email(db: Session, email: str):
-    return db.query(user_model.User).filter(user_model.User.email == email).first()
+    return db.query(UserModel).filter(UserModel.email == email).first()
+
+# Dependency to get the current user from the JWT token
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> UserModel:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    user = get_user_by_email(db, email=email)
+    if user is None:
+        raise credentials_exception
+    return user
+
+@router.get("/users/me", response_model=user_schema.UserBaseInfo) # Use a specific schema to return limited info
+def read_users_me(current_user: UserModel = Depends(get_current_user)):
+    """
+    Get the current logged-in user's information.
+    """
+    return {"name": current_user.name, "email": current_user.email, "id": current_user.id}
 
 @router.post("/users/", response_model=user_schema.User)
 def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
-    db_user = db.query(user_model.User).filter(user_model.User.email == user.email).first()
+    db_user = db.query(UserModel).filter(UserModel.email == user.email).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     hashed_password = get_password_hash(user.password)
-    db_user = user_model.User(
+    db_user = UserModel(
         email=user.email,
         hashed_password=hashed_password,
         name=user.name,
