@@ -90,6 +90,16 @@ class QueueService:
 
     # --- New methods based on DOCTOR_BACKEND.md ---
 
+    def get_queue_stats(self) -> dict:
+        """Returns a dictionary with all queue-related counts."""
+        stats = {
+            "in_attendance_count": len(self.get_customers_in_attendance_with_doctor()),
+            "waiting_count": self.get_waiting_customers_count(),
+            "completed_count": self.get_completed_services_count(),
+            "no_wait_count": self.get_no_wait_services_count(),
+        }
+        return stats
+
     def get_customers_in_attendance_with_doctor(self) -> List[dict]:
         """Shows the list of customers in attendance with the name of the professional who is currently assisting the customer."""
         db_session = next(self.get_db())
@@ -137,6 +147,18 @@ class QueueService:
         """Shows the total number of people who entered the service queue but did not wait to be served."""
         db_session = next(self.get_db())
         count = db_session.query(User).filter(User.queue_status == 'no_wait').count()
+        return count
+
+    def get_no_wait_services_count(self) -> int:
+        """Shows the total number of people who entered the service queue but did not wait to be served."""
+        db_session = next(self.get_db())
+        count = db_session.query(User).filter(User.queue_status == 'no_wait').count()
+        return count
+
+    def get_waiting_customers_count(self) -> int:
+        """Shows the total number of customers in the queue waiting for the appointment to begin."""
+        db_session = next(self.get_db())
+        count = db_session.query(User).filter(User.queue_status == 'waiting').count()
         return count
 
     def get_next_patient(self) -> Optional[User]:

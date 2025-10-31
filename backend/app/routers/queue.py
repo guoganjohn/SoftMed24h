@@ -50,3 +50,13 @@ def call_next_patient(doctor_id: int, queue_service: QueueService = Depends()):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to call next patient: {e}"
         )
+
+@router.get("/queue/stats")
+def get_queue_stats(queue_service: QueueService = Depends()):
+    try:
+        return queue_service.get_queue_stats()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve queue stats: {e}"
+        )
